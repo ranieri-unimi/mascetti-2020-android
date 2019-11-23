@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Matrice</string>
+    <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>
+</resources>
