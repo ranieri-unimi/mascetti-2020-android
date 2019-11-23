@@ -1,7 +1,21 @@
 <resources>
+    <!-- UI stings -->
     <string name="app_name">Matrice</string>
-    <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>
     <string name="splash_button">Play</string>
-    <string name="no_location">Allow \'Location\' to start playing</string>
-    <string name="no_internet">Error! Check your network connection, or retry later</string>
+
+    <!-- Global const -->
+    <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>
+
+    <!-- Snackbars Messages -->
+    <string name="no_ok_data">Something weird happened, app may crash.</string>
+    <string name="no_location">Allow LOCATION to start playing.</string>
+    <string name="no_internet">Error! Check your internet connection, or retry later.</string>
+
+    <!-- API URLs-->
+    <string name="register_url">https://ewserver.di.unimi.it/mobicomp/mostri/register.php</string>
+    <string name="getmap_url">https://ewserver.di.unimi.it/mobicomp/mostri/getmap.php</string>
+    <string name="fighteat_url">https://ewserver.di.unimi.it/mobicomp/mostri/fighteat.php</string>
+    <string name="ranking_url">https://ewserver.di.unimi.it/mobicomp/mostri/ranking.php</string>
+    <string name="getprofile_url">https://ewserver.di.unimi.it/mobicomp/mostri/getprofile.php</string>
+    <string name="setprofile_url">https://ewserver.di.unimi.it/mobicomp/mostri/setprofile.php</string>
 </resources>
