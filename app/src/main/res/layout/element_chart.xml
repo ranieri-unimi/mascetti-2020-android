@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
     <data>
         <variable name="rival" type="com.example.matrice.ChartElement" />
     </data>
@@ -16,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            />
+            app:srcCompat="@{rival.img}"/>
 
         <Space
             android:layout_width="wrap_content"

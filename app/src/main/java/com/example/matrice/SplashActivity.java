@@ -72,7 +72,7 @@ public class SplashActivity extends AppCompatActivity implements
 	}
 	
 	private void loadGame() {
-		this.startActivity(new Intent(this, MapActivity.class));
+		this.startActivity(new Intent(this, ChartActivity.class));
 	}
 	
 	@Override

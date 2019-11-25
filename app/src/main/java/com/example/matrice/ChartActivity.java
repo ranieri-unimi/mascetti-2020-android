@@ -5,17 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.matrice.databinding.ActivityChartBinding;
-import com.example.matrice.databinding.ActivityMainBinding;
-import com.example.matrice.databinding.ActivityMapBinding;
 import com.example.matrice.databinding.ElementChartBinding;
 
 import java.util.ArrayList;
@@ -32,23 +26,21 @@ public class ChartActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		b = DataBindingUtil.setContentView(this, R.layout.activity_chart);
+		
+		// RIEMPIRE L'ARRAY
 		List<ChartElement> a = new ArrayList<>();
+		a.add(new ChartElement());
+		a.add(new ChartElement());
+		a.add(new ChartElement());
 		
 		b.rcyListChart.setAdapter(new ChartAdapter(a));
 	}
-	
-	@Override
-	protected void onStart()
-	{
-		super.onStart();
-	}
-	
 	
 	class ChartAdapter extends RecyclerView.Adapter<ChartVH>
 	{
 		private List<ChartElement> rivalList;
 		
-		public ChartAdapter(List<ChartElement> rivalList){
+		private ChartAdapter(List<ChartElement> rivalList){
 			this.rivalList = rivalList;
 		}
 		
@@ -83,15 +75,16 @@ public class ChartActivity extends AppCompatActivity
 	{
 		ElementChartBinding b;
 		
-		public ChartVH(ElementChartBinding bind)
+		private ChartVH(ElementChartBinding bind)
 		{
 			super(bind.getRoot());
 			b = bind;
 		}
 		
-		public void bind(ChartElement r) {
+		private void bind(ChartElement r) {
 			b.setRival(r);
 			b.executePendingBindings();
 		}
 	}
+	
 }
