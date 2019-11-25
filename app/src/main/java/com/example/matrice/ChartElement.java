@@ -35,10 +35,10 @@ public class ChartElement
 		);
 		
 	}
-	
+
 	@BindingAdapter({"srcCompat"})
 	public static void setImageView(ImageView view, Drawable draw) {
 		view.setImageDrawable(draw);
 	}
-	
+
 }
