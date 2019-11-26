@@ -98,7 +98,7 @@ public class SplashActivity extends AppCompatActivity implements
 	{
 		try	{
 			String sid = response.getString("session_id");
-			getSharedPreferences("shrd-prf", Context.MODE_PRIVATE).edit().putString("session_id",sid).apply();
+			getSharedPreferences("settings", Context.MODE_PRIVATE).edit().putString("session_id",sid).apply();
 		}
 		catch (JSONException e) {
 			Snackbar.make(b.lytBackSplash, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
@@ -112,5 +112,4 @@ public class SplashActivity extends AppCompatActivity implements
 	public void onErrorResponse(VolleyError error) {
 		Snackbar.make(b.lytBackSplash, getText(R.string.no_internet), Snackbar.LENGTH_LONG).show();
 	}
-	
 }
