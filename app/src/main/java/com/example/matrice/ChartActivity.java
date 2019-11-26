@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class ChartActivity extends AppCompatActivity
 {
-	
 	public Smaug h = Smaug.getInstance();
 	public ActivityChartBinding b;
 	
@@ -29,9 +28,9 @@ public class ChartActivity extends AppCompatActivity
 		
 		// RIEMPIRE L'ARRAY
 		ArrayList<ChartElement> a = new ArrayList<>();
-		a.add(new ChartElement());
-		a.add(new ChartElement());
-		a.add(new ChartElement());
+		a.add(new ChartElement(getApplicationContext()));
+		a.add(new ChartElement(getApplicationContext()));
+		a.add(new ChartElement(getApplicationContext()));
 		
 		b.rcyListChart.setAdapter(new ChartAdapter(a));
 		b.rcyListChart.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
