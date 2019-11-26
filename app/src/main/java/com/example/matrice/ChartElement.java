@@ -16,9 +16,9 @@ public class ChartElement
 	public String getUsername() { return username; }
 	public void setUsername(String username) { if (username!="null") this.username=username; }
 	public String getXp() { return xp; }
-	public void setXp(String xp) { if (xp!=null) this.xp=xp; }
+	public void setXp(String xp) { this.xp = xp; }
 	public String getHp() { return hp; }
-	public void setHp(String hp) { if (hp!=null) this.hp=hp; }
+	public void setHp(String hp) { this.hp = hp; }
 	
 	public ChartElement(Context c)
 	{

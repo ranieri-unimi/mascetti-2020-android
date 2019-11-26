@@ -14,7 +14,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MapActivity"></activity>
         <activity android:name=".ChartActivity" />
-        <activity android:name=".MainActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
