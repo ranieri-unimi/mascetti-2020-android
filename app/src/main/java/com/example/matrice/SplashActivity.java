@@ -82,7 +82,7 @@ public class SplashActivity extends AppCompatActivity implements
 			checkSession();
 		}
 		else {
-			Snackbar.make(b.lytBackSplash, getText(R.string.no_location), Snackbar.LENGTH_LONG).show();
+			Snackbar.make(b.lytBackSplash, getText(R.string.no_permission), Snackbar.LENGTH_LONG).show();
 		}
 	}
 	

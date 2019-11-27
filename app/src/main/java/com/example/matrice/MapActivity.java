@@ -6,8 +6,10 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.matrice.databinding.ActivityMapBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -17,9 +19,6 @@ import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -42,20 +41,11 @@ public class MapActivity extends AppCompatActivity implements
 	private MapboxMap mapObj;
 	private MapView mapLyt;
 	private Location lastCood;
+	private boolean locInit;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		// Meccanica della posizione
-		LocationEngineRequest req = new LocationEngineRequest.Builder(750)
-				.setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-				.setMaxWaitTime(6000)
-				.setFastestInterval(750)
-				.build();
-		LocationEngine locEng = LocationEngineProvider.getBestLocationEngine(this);
-		locEng.requestLocationUpdates(req, this, getMainLooper());
-		locEng.getLastLocation(this);
-		
 		// Binding e layout
 		super.onCreate(savedInstanceState);
 		Mapbox.getInstance(this, getString(R.string.mapbox_token));
@@ -65,6 +55,20 @@ public class MapActivity extends AppCompatActivity implements
 		mapLyt = b.map;
 		mapLyt.onCreate(savedInstanceState);
 		mapLyt.getMapAsync(this);
+		
+		try
+		{
+			LocationManager locMan = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
+			if(locMan.isProviderEnabled(LocationManager.GPS_PROVIDER))
+			{
+				inintLocEng();
+				return;
+			}
+		}
+		catch (NullPointerException e) { }
+		
+		Toast.makeText(this, getText(R.string.no_location), Toast.LENGTH_LONG).show();
+		this.startActivity(new Intent(this, SplashActivity.class));
 	}
 	
 	@Override
@@ -78,28 +82,7 @@ public class MapActivity extends AppCompatActivity implements
 	@Override
 	public void onStyleLoaded(@NonNull Style style)
 	{
-		// Styling del pallino
-		LocationComponentActivationOptions dotOpt = LocationComponentActivationOptions
-				.builder(this, style)
-				.useDefaultLocationEngine(false)
-				//.styleRes(R.style.AppTheme)
-				.build();
-		
-		// L'oggetto del pallino
-		LocationComponent dot = mapObj.getLocationComponent();
-		dot.activateLocationComponent(dotOpt);
-		dot.setLocationComponentEnabled(true);
-		//dot.setCameraMode(CameraMode.TRACKING_COMPASS);
-		dot.setRenderMode(RenderMode.COMPASS);
-		
-		// Posizione di inizio della camera
-		CameraPosition position = new CameraPosition.Builder()
-				.target(new LatLng(lastCood.getLatitude(), lastCood.getLongitude())) // Sets the new camera position
-				.zoom(13) // Sets the zoom
-				//.bearing(180) // Rotate the camera
-				.tilt(60) // Set the camera tilt
-				.build(); // Creates a CameraPosition from the builder
-		mapObj.animateCamera(CameraUpdateFactory.newCameraPosition(position), 2400);
+		// Altre cose da fare con lo stile già caricato
 	}
 	
 	public void onFabClick(View v)
@@ -110,16 +93,80 @@ public class MapActivity extends AppCompatActivity implements
 	@Override
 	public void onSuccess(LocationEngineResult result)
 	{
+		// Gate gps
+		if(result.getLastLocation() == null)
+			return;
+		// gps ok
 		lastCood = result.getLastLocation();
-		if (mapObj != null && result.getLastLocation() != null) {
-			mapObj.getLocationComponent().forceLocationUpdate(result.getLastLocation());
+		
+		// Gate mappa
+		if(mapObj == null)
+			return;
+		
+		// Gate stile
+		Style s = mapObj.getStyle();
+		if(s == null)
+			return;
+		
+		// Gate LocationComponent
+		if(locInit)
+		{
+			mapObj.getLocationComponent().forceLocationUpdate(lastCood);
 		}
+		else
+		{
+			firstLoad();
+			locInit = true;
+		}
+	}
+	
+	private void firstLoad()
+	{
+		// Styling del pallino
+		LocationComponentActivationOptions dotOpt = LocationComponentActivationOptions
+				.builder(this, mapObj.getStyle())
+				.useDefaultLocationEngine(false)
+				//.styleRes(R.style.AppTheme)
+				.build();
+		
+		// L'oggetto del pallino
+		LocationComponent dot = mapObj.getLocationComponent();
+		dot.activateLocationComponent(dotOpt);
+		dot.setLocationComponentEnabled(true);
+		dot.setCameraMode(CameraMode.TRACKING_COMPASS);
+		dot.setRenderMode(RenderMode.COMPASS);
+		dot.zoomWhileTracking(13,2400);
+		dot.tiltWhileTracking(60, 100);
+
+            		/*
+		// Posizione di inizio della camera
+		CameraPosition position = new CameraPosition.Builder()
+				.target(new LatLng(lastCood.getLatitude(), lastCood.getLongitude())) // Sets the new camera position
+				.zoom(13) // Sets the zoom
+				.bearing(180) // Rotate the camera
+				.tilt(60) // Set the camera tilt
+				.build(); // Creates a CameraPosition from the builder
+		mapObj.animateCamera(CameraUpdateFactory.newCameraPosition(position), 700);
+		 */
+	}
+	
+	private void inintLocEng()
+	{
+		// Meccanica della posizione
+		LocationEngineRequest req = new LocationEngineRequest.Builder(750)
+				.setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+				.setMaxWaitTime(6000)
+				.setFastestInterval(750)
+				.build();
+		LocationEngine locEng = LocationEngineProvider.getBestLocationEngine(this);
+		locEng.requestLocationUpdates(req, this, getMainLooper());
+		locEng.getLastLocation(this);
 	}
 	
 	@Override
 	public void onFailure(@NonNull Exception exception)
 	{
-		Snackbar.make(b.lytBackMap, exception.getMessage(), Snackbar.LENGTH_SHORT).show();
+		Snackbar.make(b.lytBackMap, getText(R.string.no_location), Snackbar.LENGTH_SHORT).show();
 	}
 	
 	@Override public void onStart() { super.onStart(); mapLyt.onStart(); }
@@ -128,6 +175,7 @@ public class MapActivity extends AppCompatActivity implements
 	@Override public void onStop() { super.onStop(); mapLyt.onStop(); }
 	@Override public void onLowMemory() { super.onLowMemory(); mapLyt.onLowMemory(); }
 	@Override protected void onDestroy() { super.onDestroy(); mapLyt.onDestroy(); }
-	@Override protected void onSaveInstanceState(@NonNull Bundle outState)
-	{ super.onSaveInstanceState(outState); mapLyt.onSaveInstanceState(outState); }
+	@Override protected void onSaveInstanceState(@NonNull Bundle outState) { super.onSaveInstanceState(outState); mapLyt.onSaveInstanceState(outState); }
 }
+
+

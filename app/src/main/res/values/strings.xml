@@ -8,8 +8,9 @@
 
     <!-- Snackbars Messages -->
     <string name="no_ok_data">Something weird happened, app may crash.</string>
-    <string name="no_location">Allow LOCATION to start playing.</string>
-    <string name="no_internet">Error! Check your internet connection, or retry later.</string>
+    <string name="no_location">Hard to find your position, check if location is enabled.</string>
+    <string name="no_permission">Allow all permisisons to start playing.</string>
+    <string name="no_internet">Hm. Check your internet connection, or retry later.</string>
 
     <!-- API URLs-->
     <string name="register_url">https://ewserver.di.unimi.it/mobicomp/mostri/register.php</string>
