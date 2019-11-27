@@ -56,6 +56,7 @@ public class MapActivity extends AppCompatActivity implements
 		mapLyt.onCreate(savedInstanceState);
 		mapLyt.getMapAsync(this);
 		
+		// Posizione attiva
 		try
 		{
 			LocationManager locMan = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
@@ -83,11 +84,6 @@ public class MapActivity extends AppCompatActivity implements
 	public void onStyleLoaded(@NonNull Style style)
 	{
 		// Altre cose da fare con lo stile già caricato
-	}
-	
-	public void onFabClick(View v)
-	{
-		this.startActivity(new Intent(this, ChartActivity.class));
 	}
 	
 	@Override
@@ -118,6 +114,12 @@ public class MapActivity extends AppCompatActivity implements
 			firstLoad();
 			locInit = true;
 		}
+	}
+	
+	@Override
+	public void onFailure(@NonNull Exception exception)
+	{
+		Snackbar.make(b.lytBackMap, getText(R.string.no_location), Snackbar.LENGTH_SHORT).show();
 	}
 	
 	private void firstLoad()
@@ -163,10 +165,9 @@ public class MapActivity extends AppCompatActivity implements
 		locEng.getLastLocation(this);
 	}
 	
-	@Override
-	public void onFailure(@NonNull Exception exception)
+	public void onFabClick(View v)
 	{
-		Snackbar.make(b.lytBackMap, getText(R.string.no_location), Snackbar.LENGTH_SHORT).show();
+		this.startActivity(new Intent(this, ChartActivity.class));
 	}
 	
 	@Override public void onStart() { super.onStart(); mapLyt.onStart(); }
