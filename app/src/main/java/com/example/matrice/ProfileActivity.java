@@ -40,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 		
 		// Loading info player
 		b.setUser((Player)h.get(getString(R.string.profile)));
-		initLoadProfile();
+		//initLoadProfile();
 	}
 	
 	public void onChartClick(View v) { this.startActivity(new Intent(this, ChartActivity.class)); }
