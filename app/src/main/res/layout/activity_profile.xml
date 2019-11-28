@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ProfileActivity">
     <data>
-
+        <variable name="user" type="com.example.matrice.Player" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +35,7 @@
                 android:padding="5dp">
 
                 <ImageView
-                    android:id="@+id/imgPicProfile"
+                    android:id="@{user.img}"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -140,7 +140,7 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="@string/default_hp"
+                        android:text="@{user.hp}"
                         android:textSize="30sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -198,7 +198,7 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="@string/default_xp"
+                        android:text="@{user.xp}"
                         android:textSize="30sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"

@@ -45,11 +45,6 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 		JSONObject postObj = new JSONObject();
 		try {
 			postObj.put("session_id",sessionId);
-		} catch (JSONException e) {
-			Snackbar.make(b.lytBackChart, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-		}
-		finally
-		{
 			JsonObjectRequest jReq = new JsonObjectRequest(
 					Request.Method.POST,
 					getString(R.string.ranking_url),
@@ -60,13 +55,15 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 			
 			RequestQueue netQueue = Volley.newRequestQueue(this);
 			netQueue.add(jReq);
+		} catch (JSONException e) {
+			Snackbar.make(b.lytBackChart, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
 		}
 	}
 	
 	@Override
 	public void onResponse (JSONObject response)
 	{
-		ArrayList<ChartElement> a = new ArrayList<>();
+		ArrayList<Player> a = new ArrayList<>();
 		
 		try
 		{
@@ -74,7 +71,7 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 			for(int i = 0; i< rk.length();i++)
 			{
 				JSONObject aRival = rk.getJSONObject(i);
-				ChartElement pushRival = new ChartElement(this);
+				Player pushRival = new Player(this);
 				
 				
 				pushRival.setUsername(aRival.getString("username"));
@@ -86,15 +83,13 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 				
 				a.add(pushRival);
 			}
+			
+			b.rcyListChart.setAdapter(new ChartAdapter(a));
+			b.rcyListChart.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 		}
 		catch (JSONException e)
 		{
 			Snackbar.make(b.lytBackChart, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-		}
-		finally
-		{
-			b.rcyListChart.setAdapter(new ChartAdapter(a));
-			b.rcyListChart.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 		}
 	}
 	
@@ -106,9 +101,9 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 	
 	class ChartAdapter extends RecyclerView.Adapter<ChartVH>
 	{
-		private ArrayList<ChartElement> rivalList;
+		private ArrayList<Player> rivalList;
 		
-		private ChartAdapter(ArrayList<ChartElement> rivalList){
+		private ChartAdapter(ArrayList<Player> rivalList){
 			this.rivalList = rivalList;
 			
 		}
@@ -146,7 +141,7 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 			b = bind;
 		}
 		
-		private void bind(ChartElement r) {
+		private void bind(Player r) {
 			b.setRival(r);
 			b.executePendingBindings();
 		}

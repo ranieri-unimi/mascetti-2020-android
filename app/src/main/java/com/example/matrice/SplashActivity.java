@@ -99,12 +99,10 @@ public class SplashActivity extends AppCompatActivity implements
 		try	{
 			String sid = response.getString("session_id");
 			getSharedPreferences("settings", Context.MODE_PRIVATE).edit().putString("session_id",sid).apply();
+			loadGame();
 		}
 		catch (JSONException e) {
 			Snackbar.make(b.lytBackSplash, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-		}
-		finally	{
-			loadGame();
 		}
 	}
 	

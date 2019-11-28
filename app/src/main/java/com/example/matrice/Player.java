@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import androidx.databinding.BindingAdapter;
 
-public class ChartElement
+public class Player
 {
 	private String username;
 	private String xp;
@@ -20,7 +20,7 @@ public class ChartElement
 	public String getHp() { return hp; }
 	public void setHp(String hp) { this.hp = hp; }
 	
-	public ChartElement(Context c)
+	public Player(Context c)
 	{
 		username = "(no name)";
 		xp = "0";
