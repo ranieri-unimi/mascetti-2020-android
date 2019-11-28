@@ -67,6 +67,7 @@
                     android:hint="@string/default_username"
                     android:inputType="textPersonName"
                     android:padding="5dp"
+                    android:text="@{user.username}"
                     android:textAllCaps="false"
                     android:textColor="@color/colorAccent"
                     android:textColorHint="@color/colorAccent"

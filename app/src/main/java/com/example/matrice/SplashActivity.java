@@ -40,6 +40,8 @@ public class SplashActivity extends AppCompatActivity implements
 	{
 		super.onCreate(savedInstanceState);
 		b = DataBindingUtil.setContentView(this, R.layout.activity_splash);
+		
+		//getSharedPreferences("settings", Context.MODE_PRIVATE).edit().putString("session_id","wStTD5QkaO1ZrGAv").apply();
 	}
 
 	public void onClick(View v) {

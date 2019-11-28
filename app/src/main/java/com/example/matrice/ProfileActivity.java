@@ -5,6 +5,7 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -118,8 +119,10 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 			if(inputStream.available() > 100*1024)
 				throw new OutOfMemoryError();
 			
+			
 			// Decoding
-			String imgBase = Smaug.fromImageto64(BitmapFactory.decodeStream(inputStream));
+			Bitmap tmp = BitmapFactory.decodeStream(inputStream);
+			String imgBase = Smaug.fromImageto64(tmp);
 			
 			// Body modelling
 			String sessionId = getSharedPreferences("settings", Context.MODE_PRIVATE).getString("session_id",null);
