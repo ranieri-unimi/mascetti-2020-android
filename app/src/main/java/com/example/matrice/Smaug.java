@@ -47,7 +47,7 @@ public class Smaug extends HashMap<String, Object>
 	public static String fromImageto64(Bitmap image)
 	{
 		ByteArrayOutputStream imgByte = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.PNG, 100, imgByte);
+		image.compress(Bitmap.CompressFormat.JPEG, 100, imgByte);
 		return Base64.encodeToString(imgByte.toByteArray(), Base64.DEFAULT);
 	}
 	

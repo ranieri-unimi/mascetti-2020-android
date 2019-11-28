@@ -36,13 +36,10 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 	{
 		super.onCreate(savedInstanceState);
 		b = DataBindingUtil.setContentView(this, R.layout.activity_profile);
-		
-		// Last saved Profile
-		b.setUser((Player)h.get(getString(R.string.profile)));
-		
 		b.edtNameProfile.setOnKeyListener(this);
 		
 		// Loading info player
+		b.setUser((Player)h.get(getString(R.string.profile)));
 		initLoadProfile();
 	}
 	
@@ -84,16 +81,14 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 		@Override
 		public void onResponse(JSONObject res)
 		{
-			try
-			{
+			try {
 				Player userProfile = Smaug.fromJSONtoPlayer(res, getApplicationContext());
 				
 				// Udate it
 				h.put(getString(R.string.profile), userProfile);
 				b.setUser(userProfile);
 			}
-			catch (JSONException e)
-			{
+			catch (JSONException e) {
 				Snackbar.make(b.lytBackProfile, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
 			}
 		}
@@ -118,7 +113,6 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 			// File size check
 			if(inputStream.available() > 100*1024)
 				throw new OutOfMemoryError();
-			
 			
 			// Decoding
 			Bitmap tmp = BitmapFactory.decodeStream(inputStream);
