@@ -72,6 +72,8 @@ public class SplashActivity extends AppCompatActivity implements
 	}
 	
 	private void loadGame() {
+		// Default data
+		h.put(getString(R.string.profile), new Player(this));
 		this.startActivity(new Intent(this, MapActivity.class));
 	}
 	

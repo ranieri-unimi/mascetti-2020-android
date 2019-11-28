@@ -9,12 +9,17 @@
 
     <!-- Global const -->
     <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>
+    <string name="profile">USER_LAST_PROFILE</string>
 
     <!-- Snackbars Messages -->
     <string name="no_ok_data">Something weird happened, app may crash.</string>
     <string name="no_location">Hard to find your position, check if location is enabled.</string>
-    <string name="no_permission">Allow all permisisons to start playing.</string>
+    <string name="no_permission">Allow all permissions to start playing.</string>
     <string name="no_internet">Hm. Check your internet connection, or retry later.</string>
+    <string name="no_content">It seems you\'ve not provided any file…</string>
+    <string name="too_big">File too big, retry with a smaller image.</string>
+    <string name="image_changed">New profile picture updated!</string>
+    <string name="username_changed">New username updated!</string>
 
     <!-- API URLs-->
     <string name="register_url">https://ewserver.di.unimi.it/mobicomp/mostri/register.php</string>
