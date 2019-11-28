@@ -24,6 +24,7 @@
     <!-- API URLs-->
     <string name="register_url">https://ewserver.di.unimi.it/mobicomp/mostri/register.php</string>
     <string name="getmap_url">https://ewserver.di.unimi.it/mobicomp/mostri/getmap.php</string>
+    <string name="getimage_url">https://ewserver.di.unimi.it/mobicomp/mostri/getimage.php</string>
     <string name="fighteat_url">https://ewserver.di.unimi.it/mobicomp/mostri/fighteat.php</string>
     <string name="ranking_url">https://ewserver.di.unimi.it/mobicomp/mostri/ranking.php</string>
     <string name="getprofile_url">https://ewserver.di.unimi.it/mobicomp/mostri/getprofile.php</string>

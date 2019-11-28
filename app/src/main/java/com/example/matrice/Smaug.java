@@ -50,4 +50,5 @@ public class Smaug extends HashMap<String, Object>
 		image.compress(Bitmap.CompressFormat.PNG, 100, imgByte);
 		return Base64.encodeToString(imgByte.toByteArray(), Base64.DEFAULT);
 	}
+	
 }
