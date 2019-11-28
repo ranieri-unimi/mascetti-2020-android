@@ -167,7 +167,7 @@ public class MapActivity extends AppCompatActivity implements
 	
 	public void onFabClick(View v)
 	{
-		this.startActivity(new Intent(this, ChartActivity.class));
+		this.startActivity(new Intent(this, ProfileActivity.class));
 	}
 	
 	@Override public void onStart() { super.onStart(); mapLyt.onStart(); }
