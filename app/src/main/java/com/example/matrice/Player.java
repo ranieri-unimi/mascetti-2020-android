@@ -1,4 +1,5 @@
 package com.example.matrice;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
@@ -23,8 +24,7 @@ public class Player
 	public String getHp() { return hp; }
 	
 	
-	public Player fromJSON(JSONObject playerObject, Context context) throws JSONException
-	{
+	public Player fromJSON(JSONObject playerObject, Context context) throws JSONException {
 		// Set object
 		this.setUsername(playerObject.getString("username"));
 		this.setXp(playerObject.getString("xp"));
@@ -37,8 +37,6 @@ public class Player
 		
 		return this;
 	}
-	
-	
 	
 	public void setHpValue(int hpValue) {
 		this.hpValue = hpValue;
@@ -62,8 +60,7 @@ public class Player
 	
 	public void setXp(String xp) { this.xp = xp; }
 	
-	public Player(Context context)
-	{
+	public Player(Context context) {
 		username = "(no name)";
 		xp = "0";
 		hp = "100";
