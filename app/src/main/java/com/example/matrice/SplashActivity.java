@@ -25,10 +25,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-
-public class SplashActivity extends AppCompatActivity implements
-		PermissionsListener,
-		Response.ErrorListener
+public class SplashActivity extends AppCompatActivity implements PermissionsListener, Response.ErrorListener
 {
 	private Smaug h = Smaug.getInstance();
 	private ActivitySplashBinding b;
@@ -121,7 +118,7 @@ public class SplashActivity extends AppCompatActivity implements
 		@Override public void onResponse(JSONObject response)
 		{
 			try {
-				Player userProfile = new Player(SplashActivity.this).fromJSON(response, getApplicationContext());
+				Player userProfile = new Player(SplashActivity.this).fromJSON(response);
 				h.put(getString(R.string.profile), userProfile);
 				
 				// Everything is ok, next!

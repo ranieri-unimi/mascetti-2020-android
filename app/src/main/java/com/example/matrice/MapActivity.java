@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.location.LocationComponent;
@@ -34,11 +38,17 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
 
 
 public class MapActivity extends AppCompatActivity implements
@@ -56,7 +66,6 @@ public class MapActivity extends AppCompatActivity implements
 	private MapView mapLyt;
 	private Location lastCood;
 	private boolean locInit;
-	private ArrayList<Feature> items;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -95,22 +104,20 @@ public class MapActivity extends AppCompatActivity implements
 	public void onMapReady(@NonNull MapboxMap mapboxMap)
 	{
 		mapObj = mapboxMap;
-		
+		mapLyt.addOnStyleImageMissingListener(this);
 		try {
 			Smaug.sendJSONRequest(this, new OnMap(),this,R.string.getmap_url,new JSONObject());
+			//mapObj.setStyle(Style.DARK, this);
 		}
 		catch (JSONException e) {
 			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_SHORT).show();
 		}
-		
-		mapObj.setStyle(Style.DARK, this);
 	}
 	
 	@Override
 	public void onStyleLoaded(@NonNull Style style)
 	{
-		// Altre cose da fare con lo stile già
-		
+		// Altre cose da fare con il primo stile caricato
 	}
 	
 	@Override
@@ -204,31 +211,92 @@ public class MapActivity extends AppCompatActivity implements
 	@Override public void onErrorResponse(VolleyError error) { Snackbar.make(b.lytBackMap, getText(R.string.no_internet), Snackbar.LENGTH_LONG).show(); }
 	
 	@Override
-	public void onStyleImageMissing(@NonNull String id)
+	public void onStyleImageMissing(@NonNull final String id)
 	{
-	
+		try
+		{
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("target_id",id);
+			Smaug.sendJSONRequest(this,
+					new Response.Listener<JSONObject>() {
+						@Override public void onResponse(JSONObject response) {
+							try {
+								Drawable img = Smaug.from64toDraw(response.getString("img"), id);
+								mapObj.getStyle().addImageAsync(id,img);
+							}
+							catch (JSONException e) {
+								Log.e("mdt","JsonE in Image");
+							}
+							catch (NullPointerException e) {
+								Log.e("mdt","NullE in Image");
+							}
+						}
+					},
+					this,
+					R.string.getimage_url,
+					jsonObj
+			);
+		}
+		catch (JSONException e) { Log.e("mdt","JsonE in Missing"); }
 	}
 	
-	public class OnMap implements Response.Listener<JSONObject> {
+	public class OnMap implements Response.Listener<JSONObject>, Style.OnStyleLoaded {
 		@Override public void onResponse(JSONObject response)
 		{
-			/*
-			Feature carlosFeature = Feature.fromGeometry(Point.fromLngLat(-7.9760742,41.2778064));
-			carlosFeature.addStringProperty(PROFILE_NAME, CARLOS);
+			// Context + 2 support array
+			Context context = getApplicationContext();
+			ArrayList<Item> mapItems = new ArrayList<>();
+			ArrayList<Feature> mapPins = new ArrayList<>();
 			
-			mapboxMap.setStyle(
-					new Style.Builder().fromUri(Style.LIGHT)
-							.withSource(new GeoJsonSource(
-											ICON_SOURCE_ID,
-											FeatureCollection.fromFeatures(new Feature[] {carlosFeature})
-									)
-							),
-					this
+			try {
+				// Getting items
+				JSONArray jList = response.getJSONArray("mapobjects");
+				for(int i = 0; i< jList.length();i++)
+				{
+					// Item
+					Item item = new Item(context).fromJSON(jList.getJSONObject(i));
+					mapItems.add(item);
+					// Feature
+					Feature feat = Feature.fromGeometry(Point.fromLngLat(item.getLng(),item.getLat()));
+					feat.addStringProperty("ID", item.getId());
+					feat.addStringProperty("NAME", item.getName());
+					mapPins.add(feat);
+				}
+				
+				// Setting 2nd style
+				MapActivity.this.mapObj.setStyle(
+						new Style.Builder()
+								.fromUri(Style.DARK)
+								.withSource(new GeoJsonSource("ITEM_SOURCE", FeatureCollection.fromFeatures(mapPins))),
+						this
+				);
+				
+				//h.put(getString(R.string.item_list),mapItems);
+			}
+			catch (JSONException e) {
+				Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_SHORT).show();
+			}
+		}
+		
+		@Override
+		public void onStyleLoaded(@NonNull Style style)
+		{
+			style.addLayer(
+					new SymbolLayer("ITEM_LAYER", "ITEM_SOURCE")
+							.withProperties(
+									iconImage(get("ID")),
+									iconIgnorePlacement(true),
+									iconAllowOverlap(true),
+									textField(get("NAME")),
+									textColor("#D9B668"),
+									textIgnorePlacement(true),
+									textAllowOverlap(true),
+									textOffset(new Float[] { 0f, 2f })
+							)
 			);
-			*/
-			
 		}
 	}
+	
 }
 
 

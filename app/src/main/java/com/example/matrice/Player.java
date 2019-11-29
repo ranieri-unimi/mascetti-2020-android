@@ -24,7 +24,7 @@ public class Player
 	public String getHp() { return hp; }
 	
 	
-	public Player fromJSON(JSONObject playerObject, Context context) throws JSONException {
+	public Player fromJSON(JSONObject playerObject) throws JSONException {
 		// Set object
 		this.setUsername(playerObject.getString("username"));
 		this.setXp(playerObject.getString("xp"));

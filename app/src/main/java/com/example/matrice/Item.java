@@ -25,7 +25,7 @@ public class Item
 	}
 	
 	
-	public Item fromJSON(JSONObject j, Context context) throws JSONException
+	public Item fromJSON(JSONObject j) throws JSONException
 	{
 		this.setName(j.getString("name"));
 		this.setSize(j.getString("size"));

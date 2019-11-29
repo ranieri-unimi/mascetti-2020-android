@@ -1,22 +1,17 @@
 package com.example.matrice;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
-import android.view.View;
-
 
 import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +38,7 @@ public class Smaug extends HashMap<String, Object>
 	public static String fromImageto64(Bitmap image)
 	{
 		ByteArrayOutputStream imgByte = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.JPEG, 100, imgByte);
+		image.compress(Bitmap.CompressFormat.JPEG, 95, imgByte);
 		return Base64.encodeToString(imgByte.toByteArray(), Base64.DEFAULT);
 	}
 	

@@ -100,7 +100,7 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 		@Override public void onResponse(JSONObject response)
 		{
 			try {
-				Player userProfile = new Player(ProfileActivity.this).fromJSON(response, getApplicationContext());
+				Player userProfile = new Player(ProfileActivity.this).fromJSON(response);
 				h.put(getString(R.string.profile), userProfile);
 				
 				// Reload Binder

@@ -10,6 +10,7 @@
     <!-- Global const -->
     <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>
     <string name="profile">USER_LAST_PROFILE</string>
+    <string name="item_list">ITEM_LIST</string>
 
     <!-- Snackbars Messages -->
     <string name="no_ok_data">Something weird happened, app may crash.</string>

@@ -19,7 +19,7 @@
             android:id="@+id/barLifeMap"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="10dp"
             android:progress="@{user.hpValue}"
             android:progressBackgroundTint="@color/colorAccent"
             android:progressTint="@color/colorPrimary"
