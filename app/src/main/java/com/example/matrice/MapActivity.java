@@ -115,12 +115,10 @@ public class MapActivity extends AppCompatActivity implements
 			return;
 		
 		// Gate LocationComponent
-		if(locInit)
-		{
+		if(locInit) {
 			mapObj.getLocationComponent().forceLocationUpdate(lastCood);
 		}
-		else
-		{
+		else {
 			firstLoad();
 			locInit = true;
 		}
@@ -187,6 +185,7 @@ public class MapActivity extends AppCompatActivity implements
 	@Override protected void onDestroy() { super.onDestroy(); mapLyt.onDestroy(); }
 	@Override protected void onSaveInstanceState(@NonNull Bundle outState) { super.onSaveInstanceState(outState); mapLyt.onSaveInstanceState(outState); }
 	@Override public void onErrorResponse(VolleyError error) { Snackbar.make(b.lytBackMap, getText(R.string.no_internet), Snackbar.LENGTH_LONG).show(); }
+	
 }
 
 
