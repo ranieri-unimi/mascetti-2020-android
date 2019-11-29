@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,12 +12,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+
 import com.example.matrice.databinding.ActivityMapBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.mapbox.android.core.location.LocationEngine;
@@ -35,15 +33,11 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 
 public class MapActivity extends AppCompatActivity implements
 		OnMapReadyCallback,
 		Style.OnStyleLoaded,
 		LocationEngineCallback<LocationEngineResult>,
-		Response.Listener <JSONObject>,
 		Response.ErrorListener
 {
 	
@@ -63,33 +57,13 @@ public class MapActivity extends AppCompatActivity implements
 		Mapbox.getInstance(this, getString(R.string.mapbox_token));
 		b = DataBindingUtil.setContentView(this, R.layout.activity_map);
 		
-		// View della mappa
+		// Map views
 		mapLyt = b.map;
 		mapLyt.onCreate(savedInstanceState);
 		mapLyt.getMapAsync(this);
 		
-		// Default loading
+		// Binding loading (only ProgressBar atm)
 		b.setUser((Player)h.get(getString(R.string.profile)));
-		
-		// Forge body request
-		String sessionId = getSharedPreferences("settings", Context.MODE_PRIVATE).getString("session_id",null);
-		JSONObject postObj = new JSONObject();
-		try {
-			postObj.put("session_id", sessionId);
-			JsonObjectRequest jReq = new JsonObjectRequest(
-					Request.Method.POST,
-					getString(R.string.getprofile_url),
-					postObj,
-					this,
-					this
-			);
-			
-			// Put request
-			RequestQueue netQueue = Volley.newRequestQueue(this);
-			netQueue.add(jReq);
-		} catch (JSONException e) {
-			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-		}
 		
 		// Posizione attiva
 		try
@@ -106,19 +80,6 @@ public class MapActivity extends AppCompatActivity implements
 		// Colonne d'Ercole
 		Toast.makeText(this, getText(R.string.no_location), Toast.LENGTH_LONG).show();
 		this.startActivity(new Intent(this, SplashActivity.class));
-	}
-	
-	@Override
-	public void onResponse(JSONObject response)
-	{
-		try {
-			Player userProfile = Smaug.fromJSONtoPlayer(response, this);
-			h.put(getString(R.string.profile), userProfile);
-			b.setUser(userProfile);
-		}
-		catch (JSONException e) {
-			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-		}
 	}
 	
 	@Override
@@ -213,7 +174,6 @@ public class MapActivity extends AppCompatActivity implements
 		locEng.requestLocationUpdates(req, this, getMainLooper());
 		locEng.getLastLocation(this);
 	}
-	
 	
 	public void onFabClick(View v)
 	{

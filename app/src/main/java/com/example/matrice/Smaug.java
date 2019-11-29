@@ -4,7 +4,18 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
+import android.view.View;
 
+
+import androidx.annotation.Nullable;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +60,23 @@ public class Smaug extends HashMap<String, Object>
 		ByteArrayOutputStream imgByte = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 100, imgByte);
 		return Base64.encodeToString(imgByte.toByteArray(), Base64.DEFAULT);
+	}
+	
+	public static void sendJSONRequest(Context context, Response.Listener<JSONObject> response, @Nullable Response.ErrorListener error, int urlString, JSONObject postObj) throws JSONException
+	{
+		// Forge body request
+		String sessionId = context.getSharedPreferences("settings", Context.MODE_PRIVATE).getString("session_id",null);
+		postObj.put("session_id", sessionId);
+		JsonObjectRequest jReq = new JsonObjectRequest(
+				Request.Method.POST,
+				context.getString(urlString),
+				postObj,
+				response,
+				error
+		);
+		// Put request
+		RequestQueue netQueue = Volley.newRequestQueue(context);
+		netQueue.add(jReq);
 	}
 	
 }

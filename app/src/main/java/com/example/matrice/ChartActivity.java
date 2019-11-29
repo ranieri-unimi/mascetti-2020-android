@@ -40,21 +40,8 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 	{
 		super.onCreate(savedInstanceState);
 		b = DataBindingUtil.setContentView(this, R.layout.activity_chart);
-		
-		String sessionId = getSharedPreferences("settings", Context.MODE_PRIVATE).getString("session_id",null);
-		JSONObject postObj = new JSONObject();
 		try {
-			postObj.put("session_id",sessionId);
-			JsonObjectRequest jReq = new JsonObjectRequest(
-					Request.Method.POST,
-					getString(R.string.ranking_url),
-					postObj,
-					this,
-					this
-			);
-			
-			RequestQueue netQueue = Volley.newRequestQueue(this);
-			netQueue.add(jReq);
+			Smaug.sendJSONRequest(this,this,this, R.string.ranking_url, new JSONObject());
 		} catch (JSONException e) {
 			Snackbar.make(b.lytBackChart, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
 		}
@@ -77,9 +64,9 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 				pushRival.setUsername(aRival.getString("username"));
 				pushRival.setXp(aRival.getString("xp"));
 				pushRival.setHp(aRival.getString("lp"));
-				
-				byte[] bs = Base64.decode(aRival.getString("img").getBytes(), Base64.DEFAULT);
-				pushRival.setImg(Drawable.createFromStream(new ByteArrayInputStream(bs),"rival"+i));
+				pushRival.setImg(Smaug.from64toDraw(aRival.getString("img"), "rival"+i));
+				//byte[] bs = Base64.decode(aRival.getString("img").getBytes(), Base64.DEFAULT);
+				//pushRival.setImg(Drawable.createFromStream(new ByteArrayInputStream(bs),"rival"+i));
 				
 				a.add(pushRival);
 			}
@@ -87,8 +74,7 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 			b.rcyListChart.setAdapter(new ChartAdapter(a));
 			b.rcyListChart.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 		}
-		catch (JSONException e)
-		{
+		catch (JSONException e) {
 			Snackbar.make(b.lytBackChart, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
 		}
 	}
@@ -105,7 +91,6 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 		
 		private ChartAdapter(ArrayList<Player> rivalList){
 			this.rivalList = rivalList;
-			
 		}
 		
 		@NonNull
