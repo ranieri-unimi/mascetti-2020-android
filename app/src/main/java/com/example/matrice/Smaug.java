@@ -2,6 +2,7 @@ package com.example.matrice;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
 
@@ -33,6 +34,12 @@ public class Smaug extends HashMap<String, Object>
 	{
 		ByteArrayInputStream imgByte = new ByteArrayInputStream(Base64.decode(base64Image.getBytes(), Base64.DEFAULT));
 		return Drawable.createFromStream(imgByte, runtimeName);
+	}
+	
+	public static Bitmap from64toBitmap(String base64Image)
+	{
+		byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+		return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 	}
 	
 	public static String fromImageto64(Bitmap image)

@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -53,6 +54,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
 
 public class MapActivity extends AppCompatActivity implements
 		OnMapReadyCallback,
+		Response.Listener<JSONObject>,
 		Style.OnStyleLoaded,
 		LocationEngineCallback<LocationEngineResult>,
 		Response.ErrorListener,
@@ -104,10 +106,48 @@ public class MapActivity extends AppCompatActivity implements
 	public void onMapReady(@NonNull MapboxMap mapboxMap)
 	{
 		mapObj = mapboxMap;
-		mapLyt.addOnStyleImageMissingListener(this);
 		try {
-			Smaug.sendJSONRequest(this, new OnMap(),this,R.string.getmap_url,new JSONObject());
-			//mapObj.setStyle(Style.DARK, this);
+			Smaug.sendJSONRequest(
+					this,this,
+					this,R.string.getmap_url,new JSONObject());
+			mapLyt.addOnStyleImageMissingListener(this);
+		}
+		catch (JSONException e) {
+			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_SHORT).show();
+		}
+	}
+	
+	@Override public void onResponse(JSONObject response)
+	{
+		// Context + 2 support array
+		Context context = getApplicationContext();
+		ArrayList<Item> mapItems = new ArrayList<>();
+		ArrayList<Feature> mapPins = new ArrayList<>();
+		
+		try {
+			// Getting items
+			JSONArray jList = response.getJSONArray("mapobjects");
+			for(int i = 0; i< jList.length();i++)
+			{
+				// Item
+				Item item = new Item(context).fromJSON(jList.getJSONObject(i));
+				mapItems.add(item);
+				// Feature
+				Feature feat = Feature.fromGeometry(Point.fromLngLat(item.getLng(),item.getLat()));
+				feat.addStringProperty("ID", item.getId());
+				feat.addStringProperty("NAME", item.getName());
+				mapPins.add(feat);
+			}
+			
+			// Setting style
+			mapObj.setStyle(
+					new Style.Builder()
+							.fromUri(Style.DARK)
+							.withSource(new GeoJsonSource("ITEM_SOURCE", FeatureCollection.fromFeatures(mapPins))),
+					MapActivity.this
+			);
+			
+			h.put(getString(R.string.item_list),mapItems);
 		}
 		catch (JSONException e) {
 			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_SHORT).show();
@@ -117,7 +157,51 @@ public class MapActivity extends AppCompatActivity implements
 	@Override
 	public void onStyleLoaded(@NonNull Style style)
 	{
-		// Altre cose da fare con il primo stile caricato
+		style.addLayer(
+				new SymbolLayer("ITEM_LAYER", "ITEM_SOURCE")
+						.withProperties(
+								iconImage(get("ID")),
+								iconIgnorePlacement(true),
+								iconAllowOverlap(true),
+								textField(get("NAME")),
+								textColor("#D9B668"),
+								textIgnorePlacement(true),
+								textAllowOverlap(true),
+								textOffset(new Float[] { 0f, 2f })
+						)
+		);
+	}
+	
+	@Override
+	public void onStyleImageMissing(@NonNull final String id)
+	{
+		try
+		{
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("target_id",id);
+			Smaug.sendJSONRequest(this,
+					new Response.Listener<JSONObject>() {
+						@Override public void onResponse(JSONObject response) {
+							try {
+								Bitmap img = Smaug.from64toBitmap(response.getString("img"));
+								mapObj.getStyle().addImageAsync(id,img);
+							}
+							catch (JSONException e) {
+								Log.e("mdt","JsonE in Image");
+							}
+							catch (NullPointerException e) {
+								Log.e("mdt","NullE in Image");
+							}
+						}
+					},
+					this,
+					R.string.getimage_url,
+					jsonObj
+			);
+		}
+		catch (JSONException e) {
+			Log.e("mdt","JsonE in Missing");
+		}
 	}
 	
 	@Override
@@ -208,95 +292,9 @@ public class MapActivity extends AppCompatActivity implements
 	@Override public void onLowMemory() { super.onLowMemory(); mapLyt.onLowMemory(); }
 	@Override protected void onDestroy() { super.onDestroy(); mapLyt.onDestroy(); }
 	@Override protected void onSaveInstanceState(@NonNull Bundle outState) { super.onSaveInstanceState(outState); mapLyt.onSaveInstanceState(outState); }
-	@Override public void onErrorResponse(VolleyError error) { Snackbar.make(b.lytBackMap, getText(R.string.no_internet), Snackbar.LENGTH_LONG).show(); }
-	
-	@Override
-	public void onStyleImageMissing(@NonNull final String id)
-	{
-		try
-		{
-			JSONObject jsonObj = new JSONObject();
-			jsonObj.put("target_id",id);
-			Smaug.sendJSONRequest(this,
-					new Response.Listener<JSONObject>() {
-						@Override public void onResponse(JSONObject response) {
-							try {
-								Drawable img = Smaug.from64toDraw(response.getString("img"), id);
-								mapObj.getStyle().addImageAsync(id,img);
-							}
-							catch (JSONException e) {
-								Log.e("mdt","JsonE in Image");
-							}
-							catch (NullPointerException e) {
-								Log.e("mdt","NullE in Image");
-							}
-						}
-					},
-					this,
-					R.string.getimage_url,
-					jsonObj
-			);
-		}
-		catch (JSONException e) { Log.e("mdt","JsonE in Missing"); }
+	@Override public void onErrorResponse(VolleyError error)  {
+		Snackbar.make(b.lytBackMap, getText(R.string.no_internet), Snackbar.LENGTH_INDEFINITE).show();
 	}
-	
-	public class OnMap implements Response.Listener<JSONObject>, Style.OnStyleLoaded {
-		@Override public void onResponse(JSONObject response)
-		{
-			// Context + 2 support array
-			Context context = getApplicationContext();
-			ArrayList<Item> mapItems = new ArrayList<>();
-			ArrayList<Feature> mapPins = new ArrayList<>();
-			
-			try {
-				// Getting items
-				JSONArray jList = response.getJSONArray("mapobjects");
-				for(int i = 0; i< jList.length();i++)
-				{
-					// Item
-					Item item = new Item(context).fromJSON(jList.getJSONObject(i));
-					mapItems.add(item);
-					// Feature
-					Feature feat = Feature.fromGeometry(Point.fromLngLat(item.getLng(),item.getLat()));
-					feat.addStringProperty("ID", item.getId());
-					feat.addStringProperty("NAME", item.getName());
-					mapPins.add(feat);
-				}
-				
-				// Setting 2nd style
-				MapActivity.this.mapObj.setStyle(
-						new Style.Builder()
-								.fromUri(Style.DARK)
-								.withSource(new GeoJsonSource("ITEM_SOURCE", FeatureCollection.fromFeatures(mapPins))),
-						this
-				);
-				
-				//h.put(getString(R.string.item_list),mapItems);
-			}
-			catch (JSONException e) {
-				Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_SHORT).show();
-			}
-		}
-		
-		@Override
-		public void onStyleLoaded(@NonNull Style style)
-		{
-			style.addLayer(
-					new SymbolLayer("ITEM_LAYER", "ITEM_SOURCE")
-							.withProperties(
-									iconImage(get("ID")),
-									iconIgnorePlacement(true),
-									iconAllowOverlap(true),
-									textField(get("NAME")),
-									textColor("#D9B668"),
-									textIgnorePlacement(true),
-									textAllowOverlap(true),
-									textOffset(new Float[] { 0f, 2f })
-							)
-			);
-		}
-	}
-	
 }
 
 
