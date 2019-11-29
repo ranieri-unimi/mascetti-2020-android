@@ -5,6 +5,9 @@ import android.widget.ImageView;
 
 import androidx.databinding.BindingAdapter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Player
 {
 	private String username;
@@ -18,6 +21,23 @@ public class Player
 	public String getUsername() { return username; }
 	public String getXp() { return xp; }
 	public String getHp() { return hp; }
+	
+	
+	public Player fromJSON(JSONObject playerObject, Context context) throws JSONException
+	{
+		// Set object
+		this.setUsername(playerObject.getString("username"));
+		this.setXp(playerObject.getString("xp"));
+		this.setHp(playerObject.getString("lp"));
+		
+		// Getting IMG response
+		String img = playerObject.getString("img");
+		Drawable imgDrw =  Smaug.from64toDraw(img, this.getUsername());
+		this.setImg(imgDrw);
+		
+		return this;
+	}
+	
 	
 	
 	public void setHpValue(int hpValue) {

@@ -121,7 +121,7 @@ public class SplashActivity extends AppCompatActivity implements
 		@Override public void onResponse(JSONObject response)
 		{
 			try {
-				Player userProfile = Smaug.fromJSONtoPlayer(response, getApplicationContext());
+				Player userProfile = new Player(SplashActivity.this).fromJSON(response, getApplicationContext());
 				h.put(getString(R.string.profile), userProfile);
 				
 				// Everything is ok, next!

@@ -97,10 +97,10 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 	}
 	
 	public class OnProfile implements Response.Listener <JSONObject> {
-		@Override public void onResponse(JSONObject res)
+		@Override public void onResponse(JSONObject response)
 		{
 			try {
-				Player userProfile = Smaug.fromJSONtoPlayer(res, getApplicationContext());
+				Player userProfile = new Player(ProfileActivity.this).fromJSON(response, getApplicationContext());
 				h.put(getString(R.string.profile), userProfile);
 				
 				// Reload Binder

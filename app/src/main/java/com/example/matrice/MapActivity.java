@@ -23,6 +23,8 @@ import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.location.LocationEngineResult;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
@@ -33,12 +35,18 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 
 public class MapActivity extends AppCompatActivity implements
 		OnMapReadyCallback,
 		Style.OnStyleLoaded,
 		LocationEngineCallback<LocationEngineResult>,
-		Response.ErrorListener
+		Response.ErrorListener,
+		MapView.OnStyleImageMissingListener
 {
 	
 	private Smaug h = Smaug.getInstance();
@@ -48,6 +56,7 @@ public class MapActivity extends AppCompatActivity implements
 	private MapView mapLyt;
 	private Location lastCood;
 	private boolean locInit;
+	private ArrayList<Feature> items;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -86,14 +95,22 @@ public class MapActivity extends AppCompatActivity implements
 	public void onMapReady(@NonNull MapboxMap mapboxMap)
 	{
 		mapObj = mapboxMap;
-		// Puoi personalizzare lo stile con le features
+		
+		try {
+			Smaug.sendJSONRequest(this, new OnMap(),this,R.string.getmap_url,new JSONObject());
+		}
+		catch (JSONException e) {
+			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_SHORT).show();
+		}
+		
 		mapObj.setStyle(Style.DARK, this);
 	}
 	
 	@Override
 	public void onStyleLoaded(@NonNull Style style)
 	{
-		// Altre cose da fare con lo stile già caricato
+		// Altre cose da fare con lo stile già
+		
 	}
 	
 	@Override
@@ -186,6 +203,32 @@ public class MapActivity extends AppCompatActivity implements
 	@Override protected void onSaveInstanceState(@NonNull Bundle outState) { super.onSaveInstanceState(outState); mapLyt.onSaveInstanceState(outState); }
 	@Override public void onErrorResponse(VolleyError error) { Snackbar.make(b.lytBackMap, getText(R.string.no_internet), Snackbar.LENGTH_LONG).show(); }
 	
+	@Override
+	public void onStyleImageMissing(@NonNull String id)
+	{
+	
+	}
+	
+	public class OnMap implements Response.Listener<JSONObject> {
+		@Override public void onResponse(JSONObject response)
+		{
+			/*
+			Feature carlosFeature = Feature.fromGeometry(Point.fromLngLat(-7.9760742,41.2778064));
+			carlosFeature.addStringProperty(PROFILE_NAME, CARLOS);
+			
+			mapboxMap.setStyle(
+					new Style.Builder().fromUri(Style.LIGHT)
+							.withSource(new GeoJsonSource(
+											ICON_SOURCE_ID,
+											FeatureCollection.fromFeatures(new Feature[] {carlosFeature})
+									)
+							),
+					this
+			);
+			*/
+			
+		}
+	}
 }
 
 

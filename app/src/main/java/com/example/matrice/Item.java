@@ -1,27 +1,56 @@
 package com.example.matrice;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Item
 {
 	// Binding
-	private String _name;
-	private String _size;
-	private String _type;
+	private String name;
+	private String size;
+	private String type;
+	private Drawable img;
 	
 	// Map & JSON
-	private String _id;
-	private float _lat;
-	private float _lng;
+	private String id;
+	private float lat;
+	private float lng;
 	
-	public Item (JSONObject j) throws JSONException
+	public Item (Context context)
 	{
-		_name = j.getString("name");
-		_size = j.getString("size");
-		_type = j.getString("type");
-		_lng = Float.parseFloat(j.getString("lon"));
-		_lat = Float.parseFloat(j.getString("lat"));
-		_id = j.getString("id");
+		img = context.getDrawable(R.drawable.map_item);
 	}
+	
+	
+	public Item fromJSON(JSONObject j, Context context) throws JSONException
+	{
+		this.setName(j.getString("name"));
+		this.setSize(j.getString("size"));
+		this.setType(j.getString("type"));
+		this.setLng(Float.parseFloat(j.getString("lon")));
+		this.setLat(Float.parseFloat(j.getString("lat")));
+		this.setId(j.getString("id"));
+		
+		return this;
+	}
+	
+	// Getter and setter
+	public String getName() {return name;}
+	public void setName(String name) {this.name=name;}
+	public String getSize() {return size;}
+	public void setSize(String size) {this.size=size;}
+	public String getType() {return type;}
+	public void setType(String type) {this.type=type;}
+	public Drawable getImg() {return img;}
+	public void setImg(Drawable img) {this.img=img;}
+	public String getId() {return id;}
+	public void setId(String id) {this.id=id;}
+	public float getLat() {return lat;}
+	public void setLat(float lat) {this.lat=lat;}
+	public float getLng() {return lng;}
+	public void setLng(float lng) {this.lng=lng;}
+	
 }
