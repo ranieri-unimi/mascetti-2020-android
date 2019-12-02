@@ -65,5 +65,4 @@ public class Smaug extends HashMap<String, Object>
 		RequestQueue netQueue = Volley.newRequestQueue(context);
 		netQueue.add(jReq);
 	}
-	
 }

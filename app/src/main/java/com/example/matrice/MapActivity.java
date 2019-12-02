@@ -33,6 +33,8 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
@@ -82,13 +84,13 @@ public class MapActivity extends AppCompatActivity implements
 		Mapbox.getInstance(this, getString(R.string.mapbox_token));
 		b = DataBindingUtil.setContentView(this, R.layout.activity_map);
 		
+		// Binding loading (only ProgressBar atm)
+		b.setUser((Player)h.get(getString(R.string.profile)));
+		
 		// Map views
 		mapLyt = b.map;
 		mapLyt.onCreate(savedInstanceState);
 		mapLyt.getMapAsync(this);
-		
-		// Binding loading (only ProgressBar atm)
-		b.setUser((Player)h.get(getString(R.string.profile)));
 		
 		// Posizione attiva
 		try
@@ -107,10 +109,43 @@ public class MapActivity extends AppCompatActivity implements
 		this.startActivity(new Intent(this, SplashActivity.class));
 	}
 	
+	
+	@Override public void onResume() {
+		super.onResume();
+		mapLyt.onResume();
+
+		try {
+			Smaug.sendJSONRequest(this, new Response.Listener<JSONObject>() {
+				@Override public void onResponse(JSONObject response) {
+					try {
+						Player userProfile = new Player(MapActivity.this).fromJSON(response);
+						h.put(getString(R.string.profile), userProfile);
+						b.setUser(userProfile);
+					}
+					catch (JSONException e) {
+						Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
+					}
+				}
+			}
+			,this, R.string.getprofile_url, new JSONObject());
+		} catch (JSONException e) {
+			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
+		}
+	}
+	
 	@Override
 	public void onMapReady(@NonNull MapboxMap mapboxMap)
 	{
 		mapObj = mapboxMap;
+		
+		// Camera start
+		CameraPosition position = new CameraPosition.Builder()
+				.target(new LatLng(45.465, 9.190 ))
+				.zoom(11)
+				.build();
+		mapObj.animateCamera(CameraUpdateFactory.newCameraPosition(position));
+		
+		// Getting styling element
 		try {
 			Smaug.sendJSONRequest(
 					this,this,
@@ -255,21 +290,8 @@ public class MapActivity extends AppCompatActivity implements
 		LocationComponent dot = mapObj.getLocationComponent();
 		dot.activateLocationComponent(dotOpt);
 		dot.setLocationComponentEnabled(true);
-		dot.setCameraMode(CameraMode.TRACKING_COMPASS);
+		//dot.setCameraMode(CameraMode.TRACKING_COMPASS);
 		dot.setRenderMode(RenderMode.COMPASS);
-		dot.zoomWhileTracking(13,2400);
-		dot.tiltWhileTracking(60, 100);
-
-            		/*
-		// Posizione di inizio della camera
-		CameraPosition position = new CameraPosition.Builder()
-				.target(new LatLng(lastCood.getLatitude(), lastCood.getLongitude())) // Sets the new camera position
-				.zoom(13) // Sets the zoom
-				.bearing(180) // Rotate the camera
-				.tilt(60) // Set the camera tilt
-				.build(); // Creates a CameraPosition from the builder
-		mapObj.animateCamera(CameraUpdateFactory.newCameraPosition(position), 700);
-		 */
 	}
 	
 	private void inintLocEng()
@@ -290,7 +312,6 @@ public class MapActivity extends AppCompatActivity implements
 		this.startActivity(new Intent(this, ProfileActivity.class));
 	}
 	@Override public void onStart() { super.onStart(); mapLyt.onStart(); }
-	@Override public void onResume() { super.onResume(); mapLyt.onResume(); }
 	@Override public void onPause() { super.onPause(); mapLyt.onPause(); }
 	@Override public void onStop() { super.onStop(); mapLyt.onStop(); }
 	@Override public void onLowMemory() { super.onLowMemory(); mapLyt.onLowMemory(); }

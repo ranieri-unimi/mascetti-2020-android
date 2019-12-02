@@ -72,12 +72,7 @@ public class SplashActivity extends AppCompatActivity implements PermissionsList
 	}
 	
 	private void loadGame() {
-		// Getting profile
-		try {
-			Smaug.sendJSONRequest(this, new OnProfile(),this, R.string.getprofile_url, new JSONObject());
-		} catch (JSONException e) {
-			Snackbar.make(b.lytBackSplash, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-		}
+		SplashActivity.this.startActivity(new Intent(SplashActivity.this, MapActivity.class));
 	}
 	
 	@Override
@@ -114,25 +109,8 @@ public class SplashActivity extends AppCompatActivity implements PermissionsList
 		}
 	}
 	
-	public class OnProfile implements Response.Listener <JSONObject> {
-		@Override public void onResponse(JSONObject response)
-		{
-			try {
-				Player userProfile = new Player(SplashActivity.this).fromJSON(response);
-				h.put(getString(R.string.profile), userProfile);
-				
-				// Everything is ok, next!
-				SplashActivity.this.startActivity(new Intent(SplashActivity.this, MapActivity.class));
-			}
-			catch (JSONException e) {
-				Snackbar.make(b.lytBackSplash, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-			}
-		}
-	}
-	
 	@Override
-	public void onErrorResponse(VolleyError error)
-	{
+	public void onErrorResponse(VolleyError error) {
 		Snackbar.make(b.lytBackSplash, getText(R.string.no_internet), Snackbar.LENGTH_LONG).show();
 	}
 }
