@@ -38,7 +38,7 @@ public class FightActivity extends AppCompatActivity implements
 	
 	public void loadItemInfo()
 	{
-		// todo LA DISTANZA è CORRETTA
+		// todo LA DISTANZA è CORRETTA, caramella o mostro, percentuale perdita
 	}
 	
 	public void onYesClick(View v) {
@@ -54,29 +54,20 @@ public class FightActivity extends AppCompatActivity implements
 	@Override
 	public void onResponse(JSONObject response)
 	{
-		try {
-			String dspMess;
-			if(response.getBoolean("died")) {
-				b.lytBackFight.setBackgroundColor(Color.RED);
-				dspMess = getString(R.string.died);
-			}
-			else {
-				dspMess= getString(R.string.alive);
-				// Hai vito, modifica altre cose ma boh
-			}
-			// Cose da fare in ogin caso
-			b.lytSideBFight.txtInfoFight.setText(dspMess);
-			b.lytSideBFight.btnYesFight.setEnabled(false);
-			b.lytSideBFight.btnYesFight.setTextColor(Color.GRAY);
-		}
-		catch (JSONException e) {
-			Snackbar.make(b.lytBackFight, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-		}
+		// Saving on Smaug
+		h.put(ResultActivity.H_LOC, response);
+		
+		// New Activity
+		Intent i = new Intent(this, ResultActivity.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		finish();
+		this.startActivity(i);
 	}
 	
 	public void onNoClick(View v) {
-		this.startActivity(new Intent(this, MapActivity.class));
+		finish();
 	}
+	
 	@Override
 	public void onErrorResponse(VolleyError error)
 	{ Snackbar.make(b.lytBackFight, getText(R.string.no_internet), Snackbar.LENGTH_LONG).show(); }

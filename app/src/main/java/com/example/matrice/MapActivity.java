@@ -105,8 +105,11 @@ public class MapActivity extends AppCompatActivity implements
 		catch (NullPointerException e) { }
 		
 		// Colonne d'Ercole
-		Toast.makeText(this, getText(R.string.no_location), Toast.LENGTH_LONG).show();
-		this.startActivity(new Intent(this, SplashActivity.class));
+		Toast.makeText(this, getText(R.string.no_location), Toast.LENGTH_LONG).show();// New Activity
+		Intent i = new Intent(this, SplashActivity.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		finish();
+		this.startActivity(i);
 	}
 	
 	

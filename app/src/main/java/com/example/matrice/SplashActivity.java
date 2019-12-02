@@ -72,7 +72,10 @@ public class SplashActivity extends AppCompatActivity implements PermissionsList
 	}
 	
 	private void loadGame() {
-		SplashActivity.this.startActivity(new Intent(SplashActivity.this, MapActivity.class));
+		Intent i = new Intent(this, MapActivity.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		finish();
+		this.startActivity(i);
 	}
 	
 	@Override
