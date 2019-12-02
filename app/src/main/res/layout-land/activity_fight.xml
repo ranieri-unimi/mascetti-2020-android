@@ -2,8 +2,8 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lytBackFight"
     tools:context=".FightActivity">
 
     <data>
@@ -11,33 +11,37 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lytBackFight"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/colorPrimaryDark"
+        android:padding="5dp">
 
         <include
             android:id="@+id/ltySideAFight"
             layout="@layout/activity_fight_side_a"
-            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:layout_margin="5dp"
             android:padding="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/lytSideBFight"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            bind:item="@{item}" />
 
         <include
             android:id="@+id/lytSideBFight"
             layout="@layout/activity_fight_side_b"
-            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:layout_margin="5dp"
             android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/ltySideAFight"
-            app:layout_constraintTop_toTopOf="parent" />
+            bind:item="@{item}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -10,39 +11,93 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytBFight"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:padding="5dp">
 
-        <Button
-            android:id="@+id/btnYesFight"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lytInfoFight"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
-            android:background="@color/colorPrimaryDark"
             android:padding="5dp"
-            android:text="@string/fight_yes"
-            android:textColor="#F06292"
-            android:textSize="50sp"
-            android:textStyle="bold|italic"
-            app:layout_constraintBottom_toTopOf="@+id/btnNoFight"
+            app:layout_constraintBottom_toTopOf="@id/lytYesFight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/btnNoFight"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="@{item.size}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="36sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lytYesFight"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
-            android:background="@color/colorPrimaryDark"
             android:padding="5dp"
-            android:text="@string/fight_no"
-            android:textColor="#4DD0E1"
-            android:textSize="50sp"
-            android:textStyle="bold|italic"
+            app:layout_constraintBottom_toTopOf="@id/lytNoFight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytInfoFight">
+
+            <Button
+                android:id="@+id/btnYesFight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:text="@string/fight_yes"
+                android:textColor="#F06292"
+                android:textSize="50sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lytNoFight"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnYesFight" />
+            app:layout_constraintTop_toBottomOf="@id/lytYesFight">
+
+            <Button
+                android:id="@+id/btnNoFight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:text="@string/fight_no"
+                android:textColor="#4DD0E1"
+                android:textSize="50sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -7,14 +7,15 @@
     tools:context=".FightActivity">
 
     <data>
-        <variable name="topItem" type="com.example.matrice.Item" />
+        <variable name="item" type="com.example.matrice.Item" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytBackFight"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/colorPrimaryDark"
+        android:padding="5dp">
 
         <include
             android:id="@+id/ltySideAFight"
@@ -27,7 +28,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            bind:botItem="@{topItem}" />
+            bind:item="@{item}" />
 
         <include
             android:id="@+id/lytSideBFight"
@@ -39,7 +40,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ltySideAFight"/>
+            app:layout_constraintTop_toBottomOf="@id/ltySideAFight"
+            bind:item="@{item}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

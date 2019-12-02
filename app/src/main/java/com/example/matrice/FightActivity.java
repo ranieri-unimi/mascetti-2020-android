@@ -20,7 +20,7 @@ public class FightActivity extends AppCompatActivity
 		b = DataBindingUtil.setContentView(this, R.layout.activity_fight);
 		
 		String itemId = getIntent().getExtras().getString("Id");
-		b.setTopItem((Item) h.get(itemId));
+		b.setItem((Item) h.get(itemId));
 	}
 	
 }

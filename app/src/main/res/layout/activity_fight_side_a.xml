@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="botItem" type="com.example.matrice.Item" />
+        <variable name="item" type="com.example.matrice.Item" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytAFight"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/imgItemFight"
@@ -22,47 +25,37 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@{botItem.img}" />
+            app:layout_constraintVertical_weight="5"
+            app:srcCompat="@{item.img}" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lytNameFight"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
-            android:layout_marginTop="5dp"
             android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgItemFight" >
+            app:layout_constraintTop_toBottomOf="@id/imgItemFight"
+            app:layout_constraintVertical_weight="2">
 
             <TextView
                 android:id="@+id/txtNameFight"
-                android:text="@{botItem.name}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="@{item.name}"
                 android:textColor="@color/colorPrimary"
+                android:textSize="44sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabSizeFight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:clickable="true"
-            android:padding="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.90"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.90"
-            app:srcCompat="@drawable/chart_rival" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
