@@ -6,6 +6,8 @@
     <string name="hp">HP</string>
     <string name="default_username">(no name)</string>
     <string name="btn_view_chart">View National Chart</string>
+    <string name="fight_yes">FIGHT!</string>
+    <string name="fight_no">RUN!</string>
 
     <!-- Global const -->
     <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>

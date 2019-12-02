@@ -8,6 +8,8 @@ import androidx.databinding.DataBindingUtil;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -31,6 +33,7 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -47,6 +50,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
@@ -58,7 +62,8 @@ public class MapActivity extends AppCompatActivity implements
 		Style.OnStyleLoaded,
 		LocationEngineCallback<LocationEngineResult>,
 		Response.ErrorListener,
-		MapView.OnStyleImageMissingListener
+		MapView.OnStyleImageMissingListener,
+		MapboxMap.OnMapClickListener
 {
 	
 	private Smaug h = Smaug.getInstance();
@@ -121,7 +126,6 @@ public class MapActivity extends AppCompatActivity implements
 	{
 		// Context + 2 support array
 		Context context = getApplicationContext();
-		ArrayList<Item> mapItems = new ArrayList<>();
 		ArrayList<Feature> mapPins = new ArrayList<>();
 		
 		try {
@@ -131,9 +135,9 @@ public class MapActivity extends AppCompatActivity implements
 			{
 				// Item
 				Item item = new Item(context).fromJSON(jList.getJSONObject(i));
-				mapItems.add(item);
+				h.put(item.getId(),item);
 				// Feature
-				Feature feat = Feature.fromGeometry(Point.fromLngLat(item.getLng(),item.getLat()));
+				Feature feat = Feature.fromGeometry(Point.fromLngLat(item.getLng(),item.getLat()), null, item.getId());
 				feat.addStringProperty("ID", item.getId());
 				feat.addStringProperty("NAME", item.getName());
 				mapPins.add(feat);
@@ -146,8 +150,6 @@ public class MapActivity extends AppCompatActivity implements
 							.withSource(new GeoJsonSource("ITEM_SOURCE", FeatureCollection.fromFeatures(mapPins))),
 					MapActivity.this
 			);
-			
-			h.put(getString(R.string.item_list),mapItems);
 		}
 		catch (JSONException e) {
 			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_SHORT).show();
@@ -157,6 +159,7 @@ public class MapActivity extends AppCompatActivity implements
 	@Override
 	public void onStyleLoaded(@NonNull Style style)
 	{
+		mapObj.addOnMapClickListener(this);
 		style.addLayer(
 				new SymbolLayer("ITEM_LAYER", "ITEM_SOURCE")
 						.withProperties(
@@ -183,8 +186,9 @@ public class MapActivity extends AppCompatActivity implements
 					new Response.Listener<JSONObject>() {
 						@Override public void onResponse(JSONObject response) {
 							try {
-								Bitmap img = Smaug.from64toBitmap(response.getString("img"));
-								mapObj.getStyle().addImageAsync(id,img);
+								String img64 = response.getString("img");
+								mapObj.getStyle().addImageAsync(id, Smaug.from64toBitmap(img64));
+								((Item) h.get(id)).setImg(Smaug.from64toDraw(img64, "item"+id));
 							}
 							catch (JSONException e) {
 								Log.e("mdt","JsonE in Image");
@@ -294,6 +298,22 @@ public class MapActivity extends AppCompatActivity implements
 	@Override protected void onSaveInstanceState(@NonNull Bundle outState) { super.onSaveInstanceState(outState); mapLyt.onSaveInstanceState(outState); }
 	@Override public void onErrorResponse(VolleyError error)  {
 		Snackbar.make(b.lytBackMap, getText(R.string.no_internet), Snackbar.LENGTH_INDEFINITE).show();
+	}
+	
+	@Override
+	public boolean onMapClick(@NonNull LatLng point)
+	{
+		PointF pointf = mapObj.getProjection().toScreenLocation(point);
+		RectF rectF = new RectF(pointf.x - 10, pointf.y - 10, pointf.x + 10, pointf.y + 10);
+		List<Feature> featureList = mapObj.queryRenderedFeatures(rectF, "ITEM_LAYER");
+		
+		if (featureList.size() <1)
+			return false;
+		Intent intent = new Intent(this, FightActivity.class);
+		for (Feature feature: featureList)
+			intent.putExtra("Id", feature.id());
+		this.startActivity(intent);
+		return true;
 	}
 }
 

@@ -2,41 +2,44 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lytBackFight"
     tools:context=".FightActivity">
 
     <data>
-        <variable name="item" type="com.example.matrice.Item" />
+        <variable name="topItem" type="com.example.matrice.Item" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lytBackFight"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark">
 
         <include
             android:id="@+id/ltySideAFight"
             layout="@layout/activity_fight_side_a"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
             android:padding="5dp"
             app:layout_constraintBottom_toTopOf="@id/lytSideBFight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            bind:botItem="@{topItem}" />
 
         <include
             android:id="@+id/lytSideBFight"
             layout="@layout/activity_fight_side_b"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
             android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ltySideAFight" />
+            app:layout_constraintTop_toBottomOf="@id/ltySideAFight"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

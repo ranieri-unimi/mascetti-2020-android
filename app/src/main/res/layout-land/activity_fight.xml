@@ -12,13 +12,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark">
 
         <include
             android:id="@+id/ltySideAFight"
             layout="@layout/activity_fight_side_a"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -30,7 +31,7 @@
             android:id="@+id/lytSideBFight"
             layout="@layout/activity_fight_side_b"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
