@@ -7,12 +7,21 @@
     <string name="default_username">(no name)</string>
     <string name="btn_view_chart">View National Chart</string>
     <string name="fight_yes">FIGHT</string>
-    <string name="fight_no">RUN AWAY</string>
+    <string name="eat_yes">EAT</string>
+    <string name="item_no">RUN AWAY</string>
     <string name="died">YOU DIED\nXP has been resetted</string>
     <string name="alive">Well done!</string>
+    <string name="not_neat">You\'re still not near enough</string>
+    <string name="fight_s">Estimated damage: from 0 to 50 HP\n1 XP</string>
+    <string name="fight_m">Estimated damage: from 25 to 75 HP\n5 XP</string>
+    <string name="fight_l">Estimated damage: from 50 to 100 HP\n10 XP</string>
+    <string name="eat_s">Estimated restore: from 0 to 50 HP</string>
+    <string name="eat_m">Estimated restore: from 25 to 75 HP</string>
+    <string name="eat_l">Estimated restore: from 50 to 100 HP</string>
 
     <!-- Global const -->
     <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>
+    <string name="max_distance">7000</string>
     <string name="profile">USER_LAST_PROFILE</string>
     <string name="item_list">ITEM_LIST</string>
 

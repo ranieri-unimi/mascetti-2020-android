@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.pi;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
 
 
@@ -73,7 +74,7 @@ public class MapActivity extends AppCompatActivity implements
 	
 	private MapboxMap mapObj;
 	private MapView mapLyt;
-	private Location lastCood;
+	private LatLng lastCood = new LatLng(45.465, 9.190);
 	private boolean locInit;
 	
 	@Override
@@ -93,11 +94,9 @@ public class MapActivity extends AppCompatActivity implements
 		mapLyt.getMapAsync(this);
 		
 		// Posizione attiva
-		try
-		{
+		try {
 			LocationManager locMan = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
-			if(locMan.isProviderEnabled(LocationManager.GPS_PROVIDER))
-			{
+			if(locMan.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				inintLocEng();
 				return;
 			}
@@ -143,7 +142,7 @@ public class MapActivity extends AppCompatActivity implements
 		
 		// Camera start
 		CameraPosition position = new CameraPosition.Builder()
-				.target(new LatLng(45.465, 9.190 ))
+				.target(new LatLng(lastCood.getLatitude(), lastCood.getLongitude() ))
 				.zoom(11)
 				.build();
 		mapObj.animateCamera(CameraUpdateFactory.newCameraPosition(position));
@@ -253,7 +252,7 @@ public class MapActivity extends AppCompatActivity implements
 		if(result.getLastLocation() == null)
 			return;
 		// gps ok
-		lastCood = result.getLastLocation();
+		lastCood =  new LatLng(result.getLastLocation());
 		
 		// Gate mappa
 		if(mapObj == null)
@@ -266,7 +265,7 @@ public class MapActivity extends AppCompatActivity implements
 		
 		// Gate LocationComponent
 		if(locInit) {
-			mapObj.getLocationComponent().forceLocationUpdate(lastCood);
+			mapObj.getLocationComponent().forceLocationUpdate(result.getLastLocation());
 		}
 		else {
 			firstLoad();
@@ -303,7 +302,7 @@ public class MapActivity extends AppCompatActivity implements
 		LocationEngineRequest req = new LocationEngineRequest.Builder(750)
 				.setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
 				.setMaxWaitTime(6000)
-				.setFastestInterval(750)
+				//.setFastestInterval(750)
 				.build();
 		LocationEngine locEng = LocationEngineProvider.getBestLocationEngine(this);
 		locEng.requestLocationUpdates(req, this, getMainLooper());
@@ -336,9 +335,9 @@ public class MapActivity extends AppCompatActivity implements
 		Intent intent = new Intent(this, FightActivity.class);
 		for (Feature feature: featureList)
 			intent.putExtra("Id", feature.id());
+		double dst = point.distanceTo(lastCood);
+		intent.putExtra("Distance", dst);
 		this.startActivity(intent);
 		return true;
 	}
 }
-
-
