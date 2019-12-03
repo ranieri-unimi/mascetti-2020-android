@@ -18,31 +18,31 @@
         android:padding="5dp">
 
         <include
+            android:id="@+id/ltySideAProfile"
             layout="@layout/activity_profile_side_a"
-            android:id="@+id/frmA"
-            bind:user="@{user}"
-            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:layout_margin="5dp"
-            android:orientation="vertical"
             android:padding="5dp"
-            app:layout_constraintEnd_toStartOf="@id/frmB"
+            app:layout_constraintEnd_toStartOf="@id/lytSideBProfile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            bind:user="@{user}" />
 
         <include
+            android:id="@+id/lytSideBProfile"
             layout="@layout/activity_profile_side_b"
-            bind:user="@{user}"
-            android:id="@+id/frmB"
-            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:layout_margin="5dp"
-            android:orientation="vertical"
             android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/frmA"/>
+            app:layout_constraintStart_toEndOf="@id/ltySideAProfile"
+            bind:user="@{user}"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
