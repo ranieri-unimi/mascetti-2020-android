@@ -1,128 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    android:padding="20dp"
     tools:context=".ResultActivity">
 
-    <TextView
-        android:id="@+id/txtTitleResult"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="5dp"
-        android:padding="5dp"
-        android:textColor="@color/colorPrimary"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/lytXpResult"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="3" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/lytXpResult"
+        android:id="@+id/lytBackResult"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="5dp"
-        android:padding="5dp"
-        app:layout_constraintBottom_toTopOf="@id/lytHpResult"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtTitleResult"
-        app:layout_constraintVertical_weight="1">
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
+        android:padding="20dp">
 
         <TextView
-            android:id="@+id/txtXpHead"
-            android:layout_width="0dp"
+            android:id="@+id/txtTitleResult"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
-            android:background="#7986CB"
             android:gravity="center|center_horizontal|center_vertical"
             android:padding="5dp"
-            android:text="@string/xp"
-            android:textSize="24sp"
+            android:text="@string/alive"
+            android:textColor="@color/colorPrimary"
+            android:textSize="36sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/txtXpResult"
+            app:layout_constraintBottom_toTopOf="@id/lytXpResult"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="3" />
 
-        <TextView
-            android:id="@+id/txtXpResult"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lytXpResult"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
-            android:background="#9FA8DA"
             android:padding="5dp"
+            app:layout_constraintBottom_toTopOf="@id/lytHpResult"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtTitleResult"
+            app:layout_constraintVertical_weight="2">
+
+            <TextView
+                android:id="@+id/txtXpHead"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:background="#7986CB"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:padding="5dp"
+                android:text="@string/xp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/txtXpResult"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtXpResult"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:background="#9FA8DA"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:padding="5dp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtXpHead"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lytHpResult"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            app:layout_constraintBottom_toTopOf="@id/btnMapResult"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytXpResult"
+            app:layout_constraintVertical_weight="2">
+
+            <TextView
+                android:id="@+id/txtHpHead"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:background="#E57373"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:padding="5dp"
+                android:text="@string/hp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/txtHpResult"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtHpResult"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:background="#EF9A9A"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:padding="5dp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/txtHpHead"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/btnMapResult"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimary"
+            android:onClick="onClick"
+            android:padding="5dp"
+            android:text="@string/back_to_map"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txtXpHead"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/lytHpResult"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="5dp"
-        android:padding="5dp"
-        app:layout_constraintBottom_toTopOf="@id/btnMapResult"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lytXpResult"
-        app:layout_constraintVertical_weight="1">
-
-        <TextView
-            android:id="@+id/txtHpHead"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="5dp"
-            android:background="#E57373"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:padding="5dp"
-            android:text="@string/hp"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/txtHpResult"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txtHpResult"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="5dp"
-            android:background="#EF9A9A"
-            android:padding="5dp"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/txtHpHead"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/lytHpResult"
+            app:layout_constraintVertical_weight="3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/btnMapResult"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="5dp"
-        android:background="@color/colorPrimary"
-        android:onClick="onClick"
-        android:padding="5dp"
-        android:text="@string/back_to_map"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lytHpResult"
-        app:layout_constraintVertical_weight="2" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

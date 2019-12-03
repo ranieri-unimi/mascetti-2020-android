@@ -9,7 +9,7 @@
     <string name="fight_yes">FIGHT</string>
     <string name="eat_yes">EAT</string>
     <string name="item_no">RUN AWAY</string>
-    <string name="died">YOU DIED\nXP has been resetted</string>
+    <string name="died">YOU DIED</string>
     <string name="alive">Well done!</string>
     <string name="not_near">You\'re still not near enough</string>
     <string name="fight_s">HP damage: 0 – 50\nXP gain: 1</string>
@@ -22,7 +22,7 @@
 
     <!-- Global const -->
     <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>
-    <string name="max_distance">7000</string>
+    <string name="max_distance">13000</string>
     <string name="profile">USER_LAST_PROFILE</string>
     <string name="item_list">ITEM_LIST</string>
 
