@@ -32,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 		super.onCreate(savedInstanceState);
 		b = DataBindingUtil.setContentView(this, R.layout.activity_profile);
 		
-		b.edtNameProfile.setOnKeyListener(this);
+		b.lytBackA.edtNameProfile.setOnKeyListener(this);
 		
 		// Loading info player
 		b.setUser((Player)h.get(getString(R.string.profile)));
@@ -85,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 			try {
 				// Setting new username
 				JSONObject postObj = new JSONObject();
-				postObj.put("username", b.edtNameProfile.getText());
+				postObj.put("username", b.lytBackA.edtNameProfile.getText());
 				Smaug.sendJSONRequest(this, new OnUsername(),this,R.string.setprofile_url,postObj);
 				return true;
 			}
