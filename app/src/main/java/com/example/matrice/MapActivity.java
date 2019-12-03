@@ -5,13 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +34,6 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
-import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -55,7 +50,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.pi;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
 
 
@@ -85,7 +79,7 @@ public class MapActivity extends AppCompatActivity implements
 		Mapbox.getInstance(this, getString(R.string.mapbox_token));
 		b = DataBindingUtil.setContentView(this, R.layout.activity_map);
 		
-		// Binding loading (only ProgressBar atm)
+		// Binding provvisorio ProgressBar
 		b.setUser((Player)h.get(getString(R.string.profile)));
 		
 		// Map views
@@ -93,7 +87,7 @@ public class MapActivity extends AppCompatActivity implements
 		mapLyt.onCreate(savedInstanceState);
 		mapLyt.getMapAsync(this);
 		
-		// Posizione attiva
+		// Posizione attiva?
 		try {
 			LocationManager locMan = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
 			if(locMan.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -115,7 +109,8 @@ public class MapActivity extends AppCompatActivity implements
 	@Override public void onResume() {
 		super.onResume();
 		mapLyt.onResume();
-
+		
+		// Binding ProgressBar definitivo
 		try {
 			Smaug.sendJSONRequest(this, new Response.Listener<JSONObject>() {
 				@Override public void onResponse(JSONObject response) {
@@ -161,8 +156,6 @@ public class MapActivity extends AppCompatActivity implements
 	
 	@Override public void onResponse(JSONObject response)
 	{
-		// Context + 2 support array
-		Context context = getApplicationContext();
 		ArrayList<Feature> mapPins = new ArrayList<>();
 		
 		try {
@@ -171,7 +164,7 @@ public class MapActivity extends AppCompatActivity implements
 			for(int i = 0; i< jList.length();i++)
 			{
 				// Item
-				Item item = new Item(context).fromJSON(jList.getJSONObject(i));
+				Item item = new Item(getApplicationContext()).fromJSON(jList.getJSONObject(i));
 				h.put(item.getId(),item);
 				// Feature
 				Feature feat = Feature.fromGeometry(Point.fromLngLat(item.getLng(),item.getLat()), null, item.getId());
@@ -215,8 +208,7 @@ public class MapActivity extends AppCompatActivity implements
 	@Override
 	public void onStyleImageMissing(@NonNull final String id)
 	{
-		try
-		{
+		try {
 			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("target_id",id);
 			Smaug.sendJSONRequest(this,
@@ -268,7 +260,7 @@ public class MapActivity extends AppCompatActivity implements
 			mapObj.getLocationComponent().forceLocationUpdate(result.getLastLocation());
 		}
 		else {
-			firstLoad();
+			componentLoad();
 			locInit = true;
 		}
 	}
@@ -279,7 +271,7 @@ public class MapActivity extends AppCompatActivity implements
 		Snackbar.make(b.lytBackMap, getText(R.string.no_location), Snackbar.LENGTH_SHORT).show();
 	}
 	
-	private void firstLoad()
+	private void componentLoad()
 	{
 		// Styling del pallino
 		LocationComponentActivationOptions dotOpt = LocationComponentActivationOptions
