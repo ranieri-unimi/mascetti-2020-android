@@ -2,9 +2,6 @@ package com.example.matrice;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
-
-import androidx.databinding.BindingAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;

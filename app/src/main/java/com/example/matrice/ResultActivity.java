@@ -3,14 +3,10 @@ package com.example.matrice;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import android.app.Instrumentation;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 
-import com.example.matrice.databinding.ActivityProfileBinding;
 import com.example.matrice.databinding.ActivityResultBinding;
 import com.google.android.material.snackbar.Snackbar;
 
