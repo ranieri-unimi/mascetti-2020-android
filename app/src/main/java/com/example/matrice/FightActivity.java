@@ -12,7 +12,6 @@ import android.view.View;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.matrice.databinding.ActivityFightBinding;
-import com.example.matrice.databinding.ActivitySplashBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -81,7 +80,7 @@ public class FightActivity extends AppCompatActivity implements
 		{
 			b.lytSideBFight.btnYesFight.setEnabled(false);
 			b.lytSideBFight.btnYesFight.setTextColor(Color.GRAY);
-			b.lytSideBFight.txtInfoFight.setText(R.string.not_neat);
+			b.lytSideBFight.txtInfoFight.setText(R.string.not_near);
 		}
 	}
 	

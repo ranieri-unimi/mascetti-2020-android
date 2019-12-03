@@ -24,7 +24,8 @@
             app:layout_constraintBottom_toTopOf="@id/lytYesFight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="4">
 
             <TextView
                 android:id="@+id/txtInfoFight"
@@ -34,7 +35,7 @@
                 android:gravity="center|center_horizontal|center_vertical"
                 android:padding="5dp"
                 android:textColor="@color/colorPrimary"
-                android:textSize="36sp"
+                android:textSize="30sp"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +52,8 @@
             app:layout_constraintBottom_toTopOf="@id/lytNoFight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lytInfoFight">
+            app:layout_constraintTop_toBottomOf="@id/lytInfoFight"
+            app:layout_constraintVertical_weight="3">
 
             <Button
                 android:id="@+id/btnYesFight"
@@ -79,7 +81,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lytYesFight">
+            app:layout_constraintTop_toBottomOf="@id/lytYesFight"
+            app:layout_constraintVertical_weight="3">
 
             <Button
                 android:id="@+id/btnNoFight"

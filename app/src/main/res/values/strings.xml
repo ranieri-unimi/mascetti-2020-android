@@ -11,13 +11,13 @@
     <string name="item_no">RUN AWAY</string>
     <string name="died">YOU DIED\nXP has been resetted</string>
     <string name="alive">Well done!</string>
-    <string name="not_neat">You\'re still not near enough</string>
-    <string name="fight_s">Estimated damage: from 0 to 50 HP\n1 XP</string>
-    <string name="fight_m">Estimated damage: from 25 to 75 HP\n5 XP</string>
-    <string name="fight_l">Estimated damage: from 50 to 100 HP\n10 XP</string>
-    <string name="eat_s">Estimated restore: from 0 to 50 HP</string>
-    <string name="eat_m">Estimated restore: from 25 to 75 HP</string>
-    <string name="eat_l">Estimated restore: from 50 to 100 HP</string>
+    <string name="not_near">You\'re still not near enough</string>
+    <string name="fight_s">HP damage: 0 – 50\nXP gain: 1</string>
+    <string name="fight_m">HP damage: 25 – 75\nXP gain: 3</string>
+    <string name="fight_l">HP damage: 50 – 100\nXP gain: 10</string>
+    <string name="eat_s">Hp restore:\n0 – 50</string>
+    <string name="eat_m">Hp restore:\n25 – 75</string>
+    <string name="eat_l">Hp restore:\n50 – 100</string>
 
     <!-- Global const -->
     <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>
