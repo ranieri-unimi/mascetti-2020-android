@@ -18,6 +18,7 @@
     <string name="eat_s">Hp restore:\n0 – 50</string>
     <string name="eat_m">Hp restore:\n25 – 75</string>
     <string name="eat_l">Hp restore:\n50 – 100</string>
+    <string name="back_to_map">Return to map</string>
 
     <!-- Global const -->
     <string name="mapbox_token">pk.eyJ1IjoibWFmZmluOTkiLCJhIjoiY2szNGF0NnQ3MGs2YzNnbnk4dDVwaHd0YiJ9.XYdHDkZRn2iHY1xmHSMc1A</string>
