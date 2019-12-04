@@ -3,6 +3,7 @@ package com.example.matrice;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -59,6 +60,10 @@ public class ResultActivity extends AppCompatActivity
 	}
 	
 	public void onClick(View v) {
+		// New Activity
+		Intent i = new Intent(this, MapActivity.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		finish();
+		this.startActivity(i);
 	}
 }
