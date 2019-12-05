@@ -85,7 +85,6 @@ public class MapActivity extends AppCompatActivity implements
 		// Map views
 		mapLyt = b.map;
 		mapLyt.onCreate(savedInstanceState);
-		mapLyt.getMapAsync(this);
 		
 		// Posizione attiva?
 		try {
@@ -109,6 +108,9 @@ public class MapActivity extends AppCompatActivity implements
 	@Override public void onResume() {
 		super.onResume();
 		mapLyt.onResume();
+		
+		
+		mapLyt.getMapAsync(this);
 		
 		// Binding ProgressBar definitivo
 		try {
