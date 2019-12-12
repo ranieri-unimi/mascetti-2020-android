@@ -69,13 +69,12 @@ public class FightActivity extends AppCompatActivity implements
 			default:
 				btnText = 0;
 				infoText = 0;
-				Log.d("mdt","switch error managing");
+				Log.e("!!","switch error managing");
 				finish();
 				break;
 		}
 		b.lytSideBFight.btnYesFight.setText(btnText);
 		b.lytSideBFight.txtInfoFight.setText(infoText);
-		Log.d("mdt", ""+near);
 		if(near > Double.parseDouble(getString(R.string.max_distance)))
 		{
 			b.lytSideBFight.btnYesFight.setEnabled(false);

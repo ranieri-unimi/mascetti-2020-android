@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,6 +31,12 @@ public class Smaug extends HashMap<String, Object>
 	public static Smaug getInstance()
 	{
 		return ourInstance;
+	}
+	
+	@BindingAdapter({"srcCompat"})
+	public static void setImageView(ImageView view, Drawable draw)
+	{
+		view.setImageDrawable(draw);
 	}
 	
 	public static Drawable from64toDraw(String base64Image, String runtimeName)

@@ -2,9 +2,6 @@ package com.example.matrice;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
-
-import androidx.databinding.BindingAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,11 +63,5 @@ public class Player
 		hp = "100";
 		hpValue = 100;
 		img = context.getDrawable(R.drawable.chart_rival);
-	}
-
-	@BindingAdapter({"srcCompat"})
-	public static void setImageView(ImageView view, Drawable draw)
-	{
-		view.setImageDrawable(draw);
 	}
 }

@@ -1,6 +1,5 @@
 package com.example.matrice;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import org.json.JSONException;

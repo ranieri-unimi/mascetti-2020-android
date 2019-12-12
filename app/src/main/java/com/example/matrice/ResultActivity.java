@@ -43,20 +43,13 @@ public class ResultActivity extends AppCompatActivity
 			Snackbar.make(b.lytBackResult, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
 			finish();
 		}
-		
 	}
 	
 	public String beauty(int value) {
 		String label = "0";
-		if(value > 0) {
-			label = "+ ";
-			label += value;
-		}
-		if (value < 0) {
-			label = "- ";
-			label += Math.abs(value);
-		}
-		return label;
+		if(value > 0) { label = "+ "; }
+		if (value < 0) { label = "- "; }
+		return label+Math.abs(value);
 	}
 	
 	public void onClick(View v) {
