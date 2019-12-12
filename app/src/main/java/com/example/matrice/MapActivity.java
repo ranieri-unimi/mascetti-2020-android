@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,7 +70,6 @@ public class MapActivity extends AppCompatActivity implements
 	private MapboxMap mapObj;
 	private MapView mapLyt;
 	private LatLng lastCood = new LatLng(45.465, 9.190);
-	private boolean locInit;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -88,15 +88,15 @@ public class MapActivity extends AppCompatActivity implements
 		
 		// Posizione attiva?
 		try {
-			LocationManager locMan = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
+			LocationManager locMan = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 			if(locMan.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				inintLocEng();
 				return;
 			}
 		}
-		catch (NullPointerException e) { }
+		catch (NullPointerException e) { Log.e("!!","Empty LocaManager in Map On Create"); }
 		
-		// Colonne d'Ercole
+		// Colonne d'Ercole - NO LOCATION
 		Toast.makeText(this, getText(R.string.no_location), Toast.LENGTH_LONG).show();// New Activity
 		Intent i = new Intent(this, SplashActivity.class);
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -104,12 +104,41 @@ public class MapActivity extends AppCompatActivity implements
 		this.startActivity(i);
 	}
 	
+	private void inintLocEng()
+	{
+		// Meccanica della posizione
+		LocationEngineRequest req = new LocationEngineRequest.Builder(1005)
+				.setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+				.setMaxWaitTime(6000)
+				//.setFastestInterval(750)
+				.build();
+		LocationEngine locEng = LocationEngineProvider.getBestLocationEngine(this);
+		locEng.requestLocationUpdates(req, this, getMainLooper());
+		locEng.getLastLocation(this);
+	}
+	
+	@Override
+	public void onSuccess(LocationEngineResult result)
+	{
+		if(result.getLastLocation() == null)
+			return;
+		lastCood =  new LatLng(result.getLastLocation());
+		
+		if(mapObj == null)
+			return;
+		mapObj.getLocationComponent().forceLocationUpdate(result.getLastLocation());
+	}
+	
+	@Override
+	public void onFailure(@NonNull Exception exception) {
+		Snackbar.make(b.lytBackMap, getText(R.string.no_location), Snackbar.LENGTH_SHORT).show();
+	}
 	
 	@Override public void onResume() {
 		super.onResume();
 		mapLyt.onResume();
 		
-		
+		// Task new map
 		mapLyt.getMapAsync(this);
 		
 		// Binding ProgressBar definitivo
@@ -135,6 +164,7 @@ public class MapActivity extends AppCompatActivity implements
 	@Override
 	public void onMapReady(@NonNull MapboxMap mapboxMap)
 	{
+		// Map getted
 		mapObj = mapboxMap;
 		
 		// Camera start
@@ -180,7 +210,7 @@ public class MapActivity extends AppCompatActivity implements
 					new Style.Builder()
 							.fromUri(Style.DARK)
 							.withSource(new GeoJsonSource("ITEM_SOURCE", FeatureCollection.fromFeatures(mapPins))),
-					MapActivity.this
+					this
 			);
 		}
 		catch (JSONException e) {
@@ -191,6 +221,7 @@ public class MapActivity extends AppCompatActivity implements
 	@Override
 	public void onStyleLoaded(@NonNull Style style)
 	{
+		componentLoad();
 		mapObj.addOnMapClickListener(this);
 		style.addLayer(
 				new SymbolLayer("ITEM_LAYER", "ITEM_SOURCE")
@@ -210,9 +241,13 @@ public class MapActivity extends AppCompatActivity implements
 	@Override
 	public void onStyleImageMissing(@NonNull final String id)
 	{
+		// Default image
+		mapObj.getStyle().addImageAsync(id, getDrawable(R.drawable.map_item));
+		
+		// Loading truly image
 		try {
 			JSONObject jsonObj = new JSONObject();
-			jsonObj.put("target_id",id);
+			jsonObj.put("target_id", id);
 			Smaug.sendJSONRequest(this,
 					new Response.Listener<JSONObject>() {
 						@Override public void onResponse(JSONObject response) {
@@ -221,12 +256,8 @@ public class MapActivity extends AppCompatActivity implements
 								mapObj.getStyle().addImageAsync(id, Smaug.from64toBitmap(img64));
 								((Item) h.get(id)).setImg(Smaug.from64toDraw(img64, "item"+id));
 							}
-							catch (JSONException e) {
-								Log.e("mdt","JsonE in Image");
-							}
-							catch (NullPointerException e) {
-								Log.e("mdt","NullE in Image");
-							}
+							catch (JSONException e) { Log.e("!!","no da ok in Image Missing"); }
+							catch (NullPointerException e) { Log.e("!!","null image in Image Missing"); }
 						}
 					},
 					this,
@@ -234,87 +265,7 @@ public class MapActivity extends AppCompatActivity implements
 					jsonObj
 			);
 		}
-		catch (JSONException e) {
-			Log.e("mdt","JsonE in Missing");
-		}
-	}
-	
-	@Override
-	public void onSuccess(LocationEngineResult result)
-	{
-		// Gate gps
-		if(result.getLastLocation() == null)
-			return;
-		// gps ok
-		lastCood =  new LatLng(result.getLastLocation());
-		
-		// Gate mappa
-		if(mapObj == null)
-			return;
-		
-		// Gate stile
-		Style s = mapObj.getStyle();
-		if(s == null)
-			return;
-		
-		// Gate LocationComponent
-		if(locInit) {
-			mapObj.getLocationComponent().forceLocationUpdate(result.getLastLocation());
-		}
-		else {
-			componentLoad();
-			locInit = true;
-		}
-	}
-	
-	@Override
-	public void onFailure(@NonNull Exception exception)
-	{
-		Snackbar.make(b.lytBackMap, getText(R.string.no_location), Snackbar.LENGTH_SHORT).show();
-	}
-	
-	private void componentLoad()
-	{
-		// Styling del pallino
-		LocationComponentActivationOptions dotOpt = LocationComponentActivationOptions
-				.builder(this, mapObj.getStyle())
-				.useDefaultLocationEngine(false)
-				//.styleRes(R.style.AppTheme)
-				.build();
-		
-		// L'oggetto del pallino
-		LocationComponent dot = mapObj.getLocationComponent();
-		dot.activateLocationComponent(dotOpt);
-		dot.setLocationComponentEnabled(true);
-		//dot.setCameraMode(CameraMode.TRACKING_COMPASS);
-		dot.setRenderMode(RenderMode.COMPASS);
-	}
-	
-	private void inintLocEng()
-	{
-		// Meccanica della posizione
-		LocationEngineRequest req = new LocationEngineRequest.Builder(750)
-				.setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-				.setMaxWaitTime(6000)
-				//.setFastestInterval(750)
-				.build();
-		LocationEngine locEng = LocationEngineProvider.getBestLocationEngine(this);
-		locEng.requestLocationUpdates(req, this, getMainLooper());
-		locEng.getLastLocation(this);
-	}
-	
-	public void onFabClick(View v)
-	{
-		this.startActivity(new Intent(this, ProfileActivity.class));
-	}
-	@Override public void onStart() { super.onStart(); mapLyt.onStart(); }
-	@Override public void onPause() { super.onPause(); mapLyt.onPause(); }
-	@Override public void onStop() { super.onStop(); mapLyt.onStop(); }
-	@Override public void onLowMemory() { super.onLowMemory(); mapLyt.onLowMemory(); }
-	@Override protected void onDestroy() { super.onDestroy(); mapLyt.onDestroy(); }
-	@Override protected void onSaveInstanceState(@NonNull Bundle outState) { super.onSaveInstanceState(outState); mapLyt.onSaveInstanceState(outState); }
-	@Override public void onErrorResponse(VolleyError error)  {
-		Snackbar.make(b.lytBackMap, getText(R.string.no_internet), Snackbar.LENGTH_INDEFINITE).show();
+		catch (JSONException e) { Log.e("!!","no da ok in Image Missing"); }
 	}
 	
 	@Override
@@ -334,4 +285,31 @@ public class MapActivity extends AppCompatActivity implements
 		this.startActivity(intent);
 		return true;
 	}
+	
+	private void componentLoad()
+	{
+		// Styling del pallino
+		LocationComponentActivationOptions dotOpt = LocationComponentActivationOptions
+				.builder(this, mapObj.getStyle())
+				.useDefaultLocationEngine(false)
+				//.styleRes(R.style.AppTheme)
+				.build();
+		
+		// L'oggetto del pallino
+		LocationComponent dot = mapObj.getLocationComponent();
+		dot.activateLocationComponent(dotOpt);
+		dot.setLocationComponentEnabled(true);
+		//dot.setCameraMode(CameraMode.TRACKING_COMPASS);
+		dot.setRenderMode(RenderMode.COMPASS);
+	}
+	
+	@Override public void onStart() { super.onStart(); mapLyt.onStart(); }
+	@Override public void onPause() { super.onPause(); mapLyt.onPause(); }
+	@Override public void onStop() { super.onStop(); mapLyt.onStop(); }
+	@Override public void onLowMemory() { super.onLowMemory(); mapLyt.onLowMemory(); }
+	@Override protected void onDestroy() { super.onDestroy(); mapLyt.onDestroy(); }
+	@Override protected void onSaveInstanceState(@NonNull Bundle outState) { super.onSaveInstanceState(outState); mapLyt.onSaveInstanceState(outState); }
+	@Override public void onErrorResponse(VolleyError error)  {
+		Snackbar.make(b.lytBackMap, getText(R.string.no_internet), Snackbar.LENGTH_INDEFINITE).show(); }
+	public void onFabClick(View v) { this.startActivity(new Intent(this, ProfileActivity.class)); }
 }
