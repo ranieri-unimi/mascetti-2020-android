@@ -3,6 +3,7 @@ package com.example.matrice;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
 
@@ -39,7 +40,8 @@ public class Smaug extends HashMap<String, Object>
 	public static Bitmap from64toBitmap(String base64Image)
 	{
 		byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
-		return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+		Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+		return Bitmap.createScaledBitmap(bitmap, 120, 120, false);
 	}
 	
 	public static String fromImageto64(Bitmap image)
@@ -47,6 +49,13 @@ public class Smaug extends HashMap<String, Object>
 		ByteArrayOutputStream imgByte = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 95, imgByte);
 		return Base64.encodeToString(imgByte.toByteArray(), Base64.DEFAULT);
+	}
+	
+	public static Bitmap fromDrawabletoBitmap (Drawable draw)
+	{
+		Bitmap bitmap = Bitmap.createBitmap(draw.getIntrinsicWidth(), draw.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+		draw.draw(new Canvas(bitmap));
+		return Bitmap.createScaledBitmap(bitmap, 120, 120, false);
 	}
 	
 	public static void sendJSONRequest(Context context, Response.Listener<JSONObject> response, @Nullable Response.ErrorListener error, int urlString, JSONObject postObj) throws JSONException

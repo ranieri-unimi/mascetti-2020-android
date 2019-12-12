@@ -4,17 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-
 import android.content.Intent;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.location.Location;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -69,6 +67,7 @@ public class MapActivity extends AppCompatActivity implements
 	
 	private MapboxMap mapObj;
 	private MapView mapLyt;
+	
 	private LatLng lastCood = new LatLng(45.465, 9.190);
 	
 	@Override
@@ -82,6 +81,25 @@ public class MapActivity extends AppCompatActivity implements
 		// Binding provvisorio ProgressBar
 		b.setUser((Player)h.get(getString(R.string.profile)));
 		
+		// Binding ProgressBar definitivo
+		try {
+			Smaug.sendJSONRequest(this, new Response.Listener<JSONObject>() {
+						@Override public void onResponse(JSONObject response) {
+							try {
+								Player userProfile = new Player(MapActivity.this).fromJSON(response);
+								h.put(getString(R.string.profile), userProfile);
+								b.setUser(userProfile);
+							}
+							catch (JSONException e) {
+								Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
+							}
+						}
+					}
+					,this, R.string.getprofile_url, new JSONObject());
+		} catch (JSONException e) {
+			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
+		}
+		
 		// Map views
 		mapLyt = b.map;
 		mapLyt.onCreate(savedInstanceState);
@@ -90,7 +108,10 @@ public class MapActivity extends AppCompatActivity implements
 		try {
 			LocationManager locMan = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 			if(locMan.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				inintLocEng();
+				// Activate location
+				initLocEng();
+				// Task new map
+				mapLyt.getMapAsync(this);
 				return;
 			}
 		}
@@ -104,7 +125,7 @@ public class MapActivity extends AppCompatActivity implements
 		this.startActivity(i);
 	}
 	
-	private void inintLocEng()
+	private void initLocEng()
 	{
 		// Meccanica della posizione
 		LocationEngineRequest req = new LocationEngineRequest.Builder(1005)
@@ -126,39 +147,14 @@ public class MapActivity extends AppCompatActivity implements
 		
 		if(mapObj == null)
 			return;
-		mapObj.getLocationComponent().forceLocationUpdate(result.getLastLocation());
+		
+		try { mapObj.getLocationComponent().forceLocationUpdate(result.getLastLocation()); }
+		catch (Exception e) { Log.e("!!", "Location Component not ready yet"); }
 	}
 	
 	@Override
 	public void onFailure(@NonNull Exception exception) {
 		Snackbar.make(b.lytBackMap, getText(R.string.no_location), Snackbar.LENGTH_SHORT).show();
-	}
-	
-	@Override public void onResume() {
-		super.onResume();
-		mapLyt.onResume();
-		
-		// Task new map
-		mapLyt.getMapAsync(this);
-		
-		// Binding ProgressBar definitivo
-		try {
-			Smaug.sendJSONRequest(this, new Response.Listener<JSONObject>() {
-				@Override public void onResponse(JSONObject response) {
-					try {
-						Player userProfile = new Player(MapActivity.this).fromJSON(response);
-						h.put(getString(R.string.profile), userProfile);
-						b.setUser(userProfile);
-					}
-					catch (JSONException e) {
-						Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-					}
-				}
-			}
-			,this, R.string.getprofile_url, new JSONObject());
-		} catch (JSONException e) {
-			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-		}
 	}
 	
 	@Override
@@ -170,7 +166,7 @@ public class MapActivity extends AppCompatActivity implements
 		// Camera start
 		CameraPosition position = new CameraPosition.Builder()
 				.target(new LatLng(lastCood.getLatitude(), lastCood.getLongitude() ))
-				.zoom(11)
+				.zoom(9)
 				.build();
 		mapObj.animateCamera(CameraUpdateFactory.newCameraPosition(position));
 		
@@ -196,7 +192,7 @@ public class MapActivity extends AppCompatActivity implements
 			for(int i = 0; i< jList.length();i++)
 			{
 				// Item
-				Item item = new Item(getApplicationContext()).fromJSON(jList.getJSONObject(i));
+				Item item = new Item().fromJSON(jList.getJSONObject(i));
 				h.put(item.getId(),item);
 				// Feature
 				Feature feat = Feature.fromGeometry(Point.fromLngLat(item.getLng(),item.getLat()), null, item.getId());
@@ -241,10 +237,16 @@ public class MapActivity extends AppCompatActivity implements
 	@Override
 	public void onStyleImageMissing(@NonNull final String id)
 	{
-		// Default image
-		mapObj.getStyle().addImageAsync(id, getDrawable(R.drawable.map_item));
+		// Image already loaded
+		Drawable i = ((Item) h.get(id)).getImg();
+		if(i != null) {
+			mapObj.getStyle().addImageAsync(id, Smaug.fromDrawabletoBitmap(i));
+			return;
+		}
 		
-		// Loading truly image
+		// Default image
+		mapObj.getStyle().addImageAsync(id, Smaug.fromDrawabletoBitmap(getDrawable(R.drawable.map_item)));
+		
 		try {
 			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("target_id", id);
@@ -303,6 +305,7 @@ public class MapActivity extends AppCompatActivity implements
 		dot.setRenderMode(RenderMode.COMPASS);
 	}
 	
+	@Override public void onResume() { super.onResume(); mapLyt.onResume(); }
 	@Override public void onStart() { super.onStart(); mapLyt.onStart(); }
 	@Override public void onPause() { super.onPause(); mapLyt.onPause(); }
 	@Override public void onStop() { super.onStop(); mapLyt.onStop(); }

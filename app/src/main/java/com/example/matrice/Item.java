@@ -19,12 +19,6 @@ public class Item
 	private float lat;
 	private float lng;
 	
-	public Item (Context context)
-	{
-		img = context.getDrawable(R.drawable.map_item);
-	}
-	
-	
 	public Item fromJSON(JSONObject j) throws JSONException
 	{
 		this.setName(j.getString("name"));
