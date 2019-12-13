@@ -46,7 +46,7 @@ public class ResultActivity extends AppCompatActivity
 	}
 	
 	public String beauty(int value) {
-		String label = "0";
+		String label = "";
 		if(value > 0) { label = "+ "; }
 		if (value < 0) { label = "- "; }
 		return label+Math.abs(value);
