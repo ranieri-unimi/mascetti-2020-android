@@ -1,6 +1,6 @@
 <resources>
     <!-- UI stings -->
-    <string name="app_name">Matrice</string>
+    <string name="app_name">Pickashu</string>
     <string name="splash_button">Play</string>
     <string name="xp">XP</string>
     <string name="hp">HP</string>
