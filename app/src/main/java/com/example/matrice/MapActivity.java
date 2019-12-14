@@ -64,6 +64,7 @@ public class MapActivity extends AppCompatActivity implements
 	
 	private Smaug h = Smaug.getInstance();
 	private ActivityMapBinding b;
+	public static final String H_LOC = "ARE_ITEMS_OBSOLETE";
 	
 	private MapboxMap mapObj;
 	private MapView mapLyt;
@@ -81,25 +82,6 @@ public class MapActivity extends AppCompatActivity implements
 		// Binding provvisorio ProgressBar
 		b.setUser((Player)h.get(getString(R.string.profile)));
 		
-		// Binding ProgressBar definitivo
-		try {
-			Smaug.sendJSONRequest(this, new Response.Listener<JSONObject>() {
-						@Override public void onResponse(JSONObject response) {
-							try {
-								Player userProfile = new Player(MapActivity.this).fromJSON(response);
-								h.put(getString(R.string.profile), userProfile);
-								b.setUser(userProfile);
-							}
-							catch (JSONException e) {
-								Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-							}
-						}
-					}
-					,this, R.string.getprofile_url, new JSONObject());
-		} catch (JSONException e) {
-			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
-		}
-		
 		// Map views
 		mapLyt = b.map;
 		mapLyt.onCreate(savedInstanceState);
@@ -110,6 +92,8 @@ public class MapActivity extends AppCompatActivity implements
 			if(locMan.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				// Activate location
 				initLocEng();
+				// Say: No item!
+				h.put(H_LOC, true);
 				// Task new map
 				mapLyt.getMapAsync(this);
 				return;
@@ -170,6 +154,16 @@ public class MapActivity extends AppCompatActivity implements
 				.build();
 		mapObj.animateCamera(CameraUpdateFactory.newCameraPosition(position));
 		
+		// Monitor over reloading
+		synchronized((Boolean)h.get(H_LOC)) {
+			if((Boolean)h.get(H_LOC))
+				loadStyle();
+		}
+	}
+	
+	public void loadStyle(){
+		// Revalidate Smaug Items
+		h.put(H_LOC, false);
 		// Getting styling element
 		try {
 			Smaug.sendJSONRequest(
@@ -305,7 +299,43 @@ public class MapActivity extends AppCompatActivity implements
 		dot.setRenderMode(RenderMode.COMPASS);
 	}
 	
-	@Override public void onResume() { super.onResume(); mapLyt.onResume(); }
+	@Override public void onResume() {
+		super.onResume();
+		mapLyt.onResume();
+		
+		// Monitor over reloading
+		synchronized((Boolean)h.get(H_LOC)) {
+			if ((Boolean) h.get(H_LOC))
+			{
+				loadStyle();
+				loadHp();
+			}
+			
+		}
+	}
+	
+	public void loadHp() {
+		// Binding ProgressBar definitivo
+		try {
+			Smaug.sendJSONRequest(this, new Response.Listener<JSONObject>() {
+						@Override public void onResponse(JSONObject response) {
+							try {
+								Player userProfile = new Player(MapActivity.this).fromJSON(response);
+								h.put(getString(R.string.profile), userProfile);
+								b.setUser(userProfile);
+							}
+							catch (JSONException e) {
+								Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
+							}
+						}
+					}
+					,this, R.string.getprofile_url, new JSONObject());
+		} catch (JSONException e) {
+			Snackbar.make(b.lytBackMap, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
+		}
+	}
+	
+	
 	@Override public void onStart() { super.onStart(); mapLyt.onStart(); }
 	@Override public void onPause() { super.onPause(); mapLyt.onPause(); }
 	@Override public void onStop() { super.onStop(); mapLyt.onStop(); }

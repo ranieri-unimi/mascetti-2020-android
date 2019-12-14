@@ -104,6 +104,9 @@ public class FightActivity extends AppCompatActivity implements
 		//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		finish();
 		this.startActivity(i);
+		
+		// Invalidate Smaug Items
+		h.put(MapActivity.H_LOC, true);
 	}
 	
 	public void onNoClick(View v) {
