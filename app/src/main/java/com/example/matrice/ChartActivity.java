@@ -6,8 +6,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -54,11 +54,11 @@ public class ChartActivity extends AppCompatActivity implements Response.Listene
 				JSONObject aRival = rk.getJSONObject(i);
 				Player pushRival = new Player(this);
 				
-				
 				pushRival.setUsername(aRival.getString("username"));
 				pushRival.setXp(aRival.getString("xp"));
 				pushRival.setHp(aRival.getString("lp"));
-				pushRival.setImg(Smaug.from64toDraw(aRival.getString("img"), "rival"+i));
+				try { pushRival.setImg(Smaug.from64toDraw(aRival.getString("img"), "rival"+i)); }
+				catch (IllegalArgumentException e) { Log.e("!!","Unhandable image found"); }
 				//byte[] bs = Base64.decode(aRival.getString("img").getBytes(), Base64.DEFAULT);
 				//pushRival.setImg(Drawable.createFromStream(new ByteArrayInputStream(bs),"rival"+i));
 				
