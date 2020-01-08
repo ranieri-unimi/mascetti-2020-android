@@ -55,12 +55,12 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 		try {
 			InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
 			
-			// File size check
-			if(inputStream.available() > 100*1024)
-				throw new OutOfMemoryError();
-			
 			// Decoding
 			String imgBase = Smaug.fromImageto64(BitmapFactory.decodeStream(inputStream));
+			
+			// File size check
+			if(imgBase.getBytes().length > 100*1024)
+				throw new OutOfMemoryError();
 			
 			// JSON
 			JSONObject postObj = new JSONObject();
