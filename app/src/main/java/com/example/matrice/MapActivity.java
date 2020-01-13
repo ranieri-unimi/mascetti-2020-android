@@ -237,7 +237,7 @@ public class MapActivity extends AppCompatActivity implements
 		}
 		
 		// Default image
-		mapObj.getStyle().addImageAsync(id, Smaug.fromDrawabletoBitmap(getDrawable(R.drawable.map_item)));
+		mapObj.getStyle().addImageAsync(id, Smaug.fromDrawabletoBitmap(getDrawable(R.drawable.map_itm)));
 		
 		try {
 			JSONObject jsonObj = new JSONObject();

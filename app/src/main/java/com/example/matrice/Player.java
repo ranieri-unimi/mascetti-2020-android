@@ -62,6 +62,6 @@ public class Player
 		xp = "0";
 		hp = "100";
 		hpValue = 100;
-		img = context.getDrawable(R.drawable.chart_rival);
+		img = context.getDrawable(R.drawable.chart_player);
 	}
 }
