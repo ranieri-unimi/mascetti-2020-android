@@ -196,7 +196,7 @@ public class MapActivity extends AppCompatActivity implements
 			}
 			
 			// Setting style
-			mapObj.setStyle(
+			mapObj.setStyle(  // TODO : null referece on map-object, bad concurrency
 					new Style.Builder()
 							.fromUri(Style.DARK)
 							.withSource(new GeoJsonSource("ITEM_SOURCE", FeatureCollection.fromFeatures(mapPins))),
