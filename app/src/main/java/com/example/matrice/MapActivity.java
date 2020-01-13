@@ -62,7 +62,7 @@ public class MapActivity extends AppCompatActivity implements
 		MapboxMap.OnMapClickListener
 {
 	
-	private Smaug h = Smaug.getInstance();
+	private final Smaug h = Smaug.getInstance();
 	private ActivityMapBinding b;
 	public static final String H_LOC = "ARE_ITEMS_OBSOLETE";
 	
@@ -154,16 +154,14 @@ public class MapActivity extends AppCompatActivity implements
 				.build();
 		mapObj.animateCamera(CameraUpdateFactory.newCameraPosition(position));
 		
-		// Monitor over reloading
-		synchronized((Boolean)h.get(H_LOC)) {
-			if((Boolean)h.get(H_LOC))
-				loadStyle();
-		}
+		loadStyle();
 	}
 	
 	public void loadStyle(){
+		
 		// Revalidate Smaug Items
 		h.put(H_LOC, false);
+		
 		// Getting styling element
 		try {
 			Smaug.sendJSONRequest(
@@ -303,14 +301,9 @@ public class MapActivity extends AppCompatActivity implements
 		super.onResume();
 		mapLyt.onResume();
 		
-		// Monitor over reloading
-		synchronized((Boolean)h.get(H_LOC)) {
-			if ((Boolean) h.get(H_LOC))
-			{
-				loadStyle();
-				loadHp();
-			}
-			
+		if(mapObj != null && mapObj.getStyle() != null){
+			loadStyle();
+			loadHp();
 		}
 	}
 	
