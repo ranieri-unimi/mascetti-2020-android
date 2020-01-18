@@ -51,6 +51,7 @@ import java.util.List;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
 
+// GG, WP
 
 public class MapActivity extends AppCompatActivity implements
 		OnMapReadyCallback,
