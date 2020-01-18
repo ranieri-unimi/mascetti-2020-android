@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 			String imgBase = Smaug.fromImageto64(BitmapFactory.decodeStream(inputStream));
 			
 			// File size check
-			if(imgBase.getBytes().length > 100*1024)
+			if(imgBase.length() > 137*1000)
 				throw new OutOfMemoryError();
 			
 			// JSON
@@ -85,13 +85,18 @@ public class ProfileActivity extends AppCompatActivity implements Response.Error
 			try {
 				// Setting new username
 				JSONObject postObj = new JSONObject();
-				postObj.put("username", b.ltySideAProfile.edtNameProfile.getText());
+				String newUsername = b.ltySideAProfile.edtNameProfile.getText().toString();
+				if(newUsername.length() > 15)
+					throw new OutOfMemoryError();
+				postObj.put("username", newUsername);
 				Smaug.sendJSONRequest(this, new OnUsername(),this,R.string.setprofile_url,postObj);
 				return true;
 			}
 			catch (JSONException e) {
 				Snackbar.make(b.lytBackProfile, getText(R.string.no_ok_data), Snackbar.LENGTH_LONG).show();
 			}
+			catch (OutOfMemoryError e) {
+				Snackbar.make(b.lytBackProfile, getText(R.string.too_long), Snackbar.LENGTH_LONG).show(); }
 		}
 		return false;
 	}
